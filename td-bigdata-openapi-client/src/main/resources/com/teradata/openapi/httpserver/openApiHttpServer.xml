@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:commonrpc="http://www.httpserver.com/schema/httpserver"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.httpserver.com/schema/httpserver http://www.httpserver.com/schema/httpserver/httpserver.xsd">
+    
+    <commonrpc:registry id="rpcRegistry" port="10009" timeout="5000"></commonrpc:registry>
+  
+    
+</beans>

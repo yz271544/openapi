@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<context id="DatabaseTables" targetRuntime="MyBatis3">
+		<!--  
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Criteria" />
+		</plugin>
+		-->
+		<commentGenerator>
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+		
+		<!-- teradata datalink -->
+		<jdbcConnection driverClass="org.postgresql.Driver"
+			connectionURL="jdbc:postgresql://192.168.20.1:5432/open_api" userId="open_api" password="123456">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		
+		<javaModelGenerator targetPackage="com.teradata.sysframe.system.domain"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="data.mapper" targetProject="src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+  
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.teradata.sysframe.system.dao" targetProject="src/main/java">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+		
+		<!-- <table tableName="tb_system_authority_info" domainObjectName="TbSystemAuthorityInfo">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+		
+		<table tableName="tb_system_param_detail" domainObjectName="TbSystemParamDetail">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+	    
+	    <table tableName="tb_sys_dict" domainObjectName="TbSysDict">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+		-->
+	     <table tableName="tb_system_user_info" domainObjectName="TbSystemUserInfo">
+	      <property name="useActualColumnNames" value="false" />
+	    </table> 
+	   
+	    <!--<table tableName="tb_system_menu_info" domainObjectName="TbSystemMenuInfo">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+	    
+	   <table tableName="tb_system_role_info" domainObjectName="TbSystemRoleInfo">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+	    
+	   <table tableName="tb_system_user_role_rel" domainObjectName="TbSystemUserRoleRel">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   
+	   <table tableName="tb_system_button_info" domainObjectName="TbSystemButtonInfo">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   
+	   <table tableName="tb_system_department_info" domainObjectName="TbSystemDepartmentInfo">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   
+	   <table tableName="tb_system_app_info" domainObjectName="TbSystemAppInfo">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   
+	   <table tableName="tb_system_service_log" domainObjectName="TbSystemServiceLog">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   -->
+	    
+	</context>
+</generatorConfiguration>

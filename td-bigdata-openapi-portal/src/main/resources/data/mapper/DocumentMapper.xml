@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.teradata.portal.web.document.dao.DocumentMapper">
+
+	<resultMap id="rootDirResultMap"
+		type="doc">
+		<id column="node_id1" property="nodeId" jdbcType="INTEGER" />
+		<result column="fathr_node1" property="fathrNode" jdbcType="VARCHAR" />
+		<result column="isleaf_node1" property="isleafNode" jdbcType="VARCHAR" />
+		<result column="node_order1" property="nodeOrder" jdbcType="VARCHAR" />
+		<result column="node_desc1" property="nodeDesc" jdbcType="VARCHAR" />
+		<result column="eff_date1" property="effDate" jdbcType="DATE" />
+		<result column="file_title1" property="fileTitle" jdbcType="VARCHAR" />
+		<result column="file_date1" property="fileDate" jdbcType="DATE" />
+		<result column="file_author1" property="fileAuthor" jdbcType="VARCHAR" />
+		<result column="file_content1" property="fileContent" jdbcType="VARCHAR" />
+		<result column="leaf1" property="leaf" jdbcType="BOOLEAN" />
+		<result column="id1" property="id" jdbcType="INTEGER" />
+		<result column="parentId1" property="parentId" jdbcType="INTEGER" />
+		<result column="text1" property="text" jdbcType="NVARCHAR" />
+		<result column="expandable1" property="expandable" jdbcType="INTEGER" />
+		<result column="expanded1" property="expanded" jdbcType="INTEGER" />
+		<collection property="children" column="fathr_node1" ofType="doc" resultMap="secLvDirResultMap" />
+	</resultMap>
+	
+	<resultMap id="secLvDirResultMap"
+		type="doc">
+		<id column="node_id2" property="nodeId" jdbcType="INTEGER" />
+		<result column="fathr_node2" property="fathrNode" jdbcType="VARCHAR" />
+		<result column="isleaf_node2" property="isleafNode" jdbcType="VARCHAR" />
+		<result column="node_order2" property="nodeOrder" jdbcType="VARCHAR" />
+		<result column="node_desc2" property="nodeDesc" jdbcType="VARCHAR" />
+		<result column="eff_date2" property="effDate" jdbcType="DATE" />
+		<result column="file_title2" property="fileTitle" jdbcType="VARCHAR" />
+		<result column="file_date2" property="fileDate" jdbcType="DATE" />
+		<result column="file_author2" property="fileAuthor" jdbcType="VARCHAR" />
+		<result column="file_content2" property="fileContent" jdbcType="VARCHAR" />
+		<result column="leaf2" property="leaf" jdbcType="BOOLEAN" />
+		<result column="id2" property="id" jdbcType="INTEGER" />
+		<result column="parentId2" property="parentId" jdbcType="INTEGER" />
+		<result column="text2" property="text" jdbcType="NVARCHAR" />
+		<result column="expandable2" property="expandable" jdbcType="INTEGER" />
+		<result column="expanded2" property="expanded" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="apiSortResultMap"
+		type="sort">
+		<id column="api_sort" property="apiSort" jdbcType="INTEGER" />
+		<result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+		<result column="api_sort_desc" property="apiSortDesc" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="documentTreeResultMap"
+		type="node">
+		<id column="node_id" property="id" jdbcType="INTEGER" />
+		<result column="fathr_node" property="parentId" jdbcType="INTEGER" />
+		<result column="isleaf_node" property="leaf" jdbcType="BOOLEAN" />
+		<result column="node_order" property="index" jdbcType="INTEGER" />
+		<result column="node_desc" property="text" jdbcType="VARCHAR" />
+		<result column="file_content" property="nodeDesc" jdbcType="NVARCHAR" />
+		<result column="depth" property="depth" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="queryOpenApiPlatformDirs" resultMap="rootDirResultMap">
+			SELECT	
+					A .node_id node_id1,A .fathr_node fathr_node1,A .isleaf_node isleaf_node1,
+					A .node_order node_order1,A .node_desc node_desc1,A .eff_date eff_date1, 
+					A. file_content file_content1, FALSE leaf1, A .node_id id1,A .fathr_node parentId1, 
+					true expandable1, true expanded1, A .node_desc text1, 
+					B.node_id node_id2,B.fathr_node fathr_node2,B.isleaf_node isleaf_node2,
+					B.node_order node_order2,B.node_desc node_desc2,B.eff_date eff_date2,  
+					B. file_content file_content2, FALSE leaf2, B.node_id id2, B .fathr_node parentId2,  
+					false expandable2, false expanded2, B.node_desc text2   
+			FROM	opi.file_dir_info A
+			JOIN opi.file_dir_info B 
+				ON	A .node_id = b.fathr_node and A .isleaf_node = 0
+			WHERE A.fathr_node = 1001
+			ORDER	BY A .node_order,B.node_order
+	</select>
+	
+	<select id="queryApiSort" resultMap="apiSortResultMap">
+		select api_sort, api_sort_name, api_sort_desc from opi.api_sort_code where api_sort_fathr_id = 0
+	</select>
+	
+	<select id="queryOpenApiPlatformDocs"  resultMap="documentTreeResultMap">
+		with RECURSIVE cte as
+		(
+				select node_id,fathr_node,
+					case when isleaf_node = 0 then false 
+					else true end isleaf_node,
+					node_order,node_desc,
+					1 as depth,file_content  
+				from opi.file_dir_info
+				where fathr_node = -1
+				union all
+				select 
+					d.node_id,d.fathr_node,
+					case when d.isleaf_node = 0 then false 
+					else true end isleaf_node,
+					d.node_order,d.node_desc,
+					depth+1,d.file_content  
+				from cte c inner join  opi.file_dir_info d
+				on c.node_id = d.fathr_node
+		)
+		select * from cte
+	</select>	
+</mapper>

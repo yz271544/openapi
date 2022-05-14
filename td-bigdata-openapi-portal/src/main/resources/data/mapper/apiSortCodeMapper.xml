@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.auth.dao.ApiSortCodeMapper">
+
+
+    <resultMap id="apiSortCodeResultMap" type="ApiSortCode">
+        <id column="api_sort" property="apiSort" jdbcType="INTEGER" />
+        <result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+        <result column="api_sort_lvl" property="apiSortLvl" jdbcType="VARCHAR" />
+        <result column="api_sort_fathr_id" property="apiSortFathrId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <!-- 查询API信息 -->
+    <sql id="selectId">
+        api_sort,
+        api_sort_name,
+        api_sort_lvl,
+        api_sort_fathr_id
+    </sql>
+
+    <select id="queryAll" resultMap="apiSortCodeResultMap" parameterType="ApiSortCode">
+        select
+        <include refid="selectId"/>
+        from opi.api_sort_code
+        order by api_sort
+    </select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

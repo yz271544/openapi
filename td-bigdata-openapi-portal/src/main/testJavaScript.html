@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        document.write('<table border = "1" width ="800" align = "center"> ');
+        var i = 0;
+        while (i < 1000){
+            if (i % 10 == 0){
+                if (i % 20 == 0)
+                    bg = "#cccccc";
+                else
+                    bg = "#ffffff";
+                document.write('<tr onmouseover="show(this)" onmouseout="noshow(this)" bgcolor="' + bg + '">');
+            }
+            //输出1000个格子
+            document.write('<td>' + i + '</td>');
+
+            i++;
+            if (i % 10 == 0)
+                document.write('</tr>');
+        }
+        document.write('</table>');
+
+
+        var ys = null;
+        function show(obj){
+            ys = obj.bgColor;
+            obj.bgColor ="red";
+        }
+        function noshow(obj){
+            obj.bgColor = ys;
+        }
+
+    </script>
+</body>
+</html>

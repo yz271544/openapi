@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-cacher" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-cacher/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-cacher/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-checker" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-checker/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-checker/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-client" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-client/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-format" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-format/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-format/src/main/scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-framework" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-framework/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-framework/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-httpclient" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-httpclient/conf" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-httpclient/src/main/scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-master" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-master/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-master/src/main/scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-portal" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-portal/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-portal/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-worker" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-worker/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi-worker/src/main/scala" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/td-bigdata-openapi/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

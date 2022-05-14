@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.teradata.portal.web.apiDisplay.dao.ApiDisMapper">
+
+	<resultMap id="apisOfSortResultMap"
+			   type="api">
+		<id column="api_id" property="apiId" jdbcType="INTEGER" />
+		<id column="api_version" property="apiVersion" jdbcType="INTEGER" />
+		<result column="api_sort" property="apiSort" jdbcType="INTEGER" />
+		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
+		<result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+		<collection property="structArgs" column="{apiId=api_id,apiVersion=api_version}" ofType="structArgs" resultMap="structArgsResultMap" />
+	</resultMap>
+
+	<resultMap id="structArgsResultMap"
+			   type="structArgs">
+		<result column="field_name" property="fieldName" jdbcType="INTEGER" />
+		<result column="field_targt_type" property="fieldTargtType" jdbcType="INTEGER" />
+		<result column="sync_must_desc" property="syncMustDesc" jdbcType="VARCHAR" />
+		<result column="asyn_must_desc" property="asynMustDesc" jdbcType="VARCHAR" />
+		<result column="rss_must_desc" property="rssMustDesc" jdbcType="VARCHAR" />
+		<result column="req_arg_id" property="reqArgId" jdbcType="VARCHAR" />
+		<result column="req_arg_deflt_val" property="reqArgDefltVal" jdbcType="VARCHAR" />
+		<result column="respn_arg_id" property="respnArgId" jdbcType="VARCHAR" />
+		<result column="respn_arg_samp_val" property="respnArgSmpVal" jdbcType="VARCHAR" />
+		<result column="field_file_desc" property="fieldFileDesc" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="addrResultMap"
+			   type="addr">
+		<result column="addr_id" property="addrId" jdbcType="INTEGER" />
+		<result column="addr_name" property="addrName" jdbcType="VARCHAR" />
+		<result column="http_addr" property="httpAddr" jdbcType="VARCHAR" />
+		<result column="https_addr" property="httpsAddr" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="publicArgsResultMap"
+			   type="publicArgs">
+		<result column="public_arg_id" property="publicArgId" jdbcType="INTEGER" />
+		<result column="public_arg_name" property="publicArgName" jdbcType="VARCHAR" />
+		<result column="public_arg_data_type" property="publicArgDataType" jdbcType="VARCHAR" />
+		<result column="code_desc" property="codeDesc" jdbcType="VARCHAR" />
+		<result column="public_arg_desc" property="publicArgDesc" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getApisBySortIdCount" resultType="java.lang.Integer" parameterType="param">
+		select count(*)
+		from opi.api_info
+		where api_sort = #{apiSort}
+		and exam_stat=2 and api_stat_code=1
+		<if test="apiId != null">
+			and api_id = #{apiId}
+			and api_version = #{apiVersion}
+		</if>
+	</select>
+
+	<select id="getApisBySortId" resultMap="apisOfSortResultMap" parameterType="param">
+		select a.api_id,a.api_sort,a.api_version,a.api_name,a.api_desc,
+		b.field_name,b.field_targt_type,c.code_desc as sync_must_desc,d.code_desc as asyn_must_desc,e.code_desc as rss_must_desc,b.field_file_desc,
+		b.req_arg_id,b.req_arg_deflt_val,b.respn_arg_id,b.respn_arg_samp_val
+		from opi.api_info a
+		LEFT JOIN opi.struct_api_arg b on a.api_id = b.api_id and a.api_version = b.api_version and (b.req_arg_id = '1' or b.respn_arg_id = '1')
+		LEFT JOIN opi.api_code c on b.sync_must_type = c.code_id and c.code_type = 'arg_must_code'
+		LEFT JOIN opi.api_code d on b.asyn_must_type = d.code_id and d.code_type = 'arg_must_code'
+		LEFT JOIN opi.api_code e on b.rss_must_type = e.code_id and e.code_type = 'arg_must_code'
+		where a.api_sort = #{apiSort}
+		and a.exam_stat=2 and a.api_stat_code=1
+		<if test="apiId != null">
+			and a.api_id = #{apiId}
+			and a.api_version = #{apiVersion}
+		</if>
+		order by 1,3
+	</select>
+
+	<select id="getApiAddr" resultMap="addrResultMap">
+		select addr_id,addr_name,http_addr,https_addr from opi.api_req_addr
+	</select>
+
+	<select id="getPubArgs" resultMap="publicArgsResultMap">
+		select a.public_arg_id,a.public_arg_name,a.public_arg_data_type,
+		b.code_desc,a.public_arg_desc
+		from opi.public_arg_info a
+		join opi.api_code b
+		on a.isnt_must = b.code_id
+		and b.code_type = 'arg_must_code'
+		order by 1
+	</select>
+
+	<select id="searchApisByText" resultMap="apisOfSortResultMap" parameterType="param">
+		select a.api_id,a.api_sort,a.api_version,a.api_name,a.api_desc,
+		b.field_name,b.field_targt_type,c.code_desc as sync_must_desc,d.code_desc as asyn_must_desc,e.code_desc as rss_must_desc,b.field_file_desc,
+		b.req_arg_id,b.req_arg_deflt_val,b.respn_arg_id,b.respn_arg_samp_val
+		from opi.api_info a
+		LEFT JOIN opi.struct_api_arg b on a.api_id = b.api_id and a.api_version = b.api_version and (b.req_arg_id = '1' or b.respn_arg_id = '1')
+		LEFT JOIN opi.api_code c on b.sync_must_type = c.code_id and c.code_type = 'arg_must_code'
+		LEFT JOIN opi.api_code d on b.asyn_must_type = d.code_id and d.code_type = 'arg_must_code'
+		LEFT JOIN opi.api_code e on b.rss_must_type = e.code_id and e.code_type = 'arg_must_code'
+		where a.exam_stat=2 and a.api_stat_code=1
+		or a.api_name like '%${searchText}%'
+		or a.api_desc like '%${searchText}%'
+		or b.field_name like '%${searchText}%'
+		or b.field_file_desc like '%${searchText}%'
+		order by 1,3
+	</select>
+
+	<select id="searchApisInResult" resultMap="apisOfSortResultMap" parameterType="java.util.List">
+		select a.api_id,a.api_sort,a.api_version,a.api_name,a.api_desc,
+		b.field_name,b.field_targt_type,c.code_desc as sync_must_desc,d.code_desc as asyn_must_desc,e.code_desc as rss_must_desc,b.field_file_desc,
+		b.req_arg_id,b.req_arg_deflt_val,b.respn_arg_id,b.respn_arg_samp_val
+		from opi.api_info a
+		LEFT JOIN opi.struct_api_arg b on a.api_id = b.api_id and a.api_version = b.api_version and (b.req_arg_id = '1' or b.respn_arg_id = '1')
+		LEFT JOIN opi.api_code c on b.syncmust_type = c.code_id and c.code_type = 'arg_must_code'
+		LEFT JOIN opi.api_code d on b.asyn_must_type = d.code_id and d.code_type = 'arg_must_code'
+		LEFT JOIN opi.api_code e on b.rss_must_type = e.code_id and e.code_type = 'arg_must_code'
+		where a.exam_stat=2 and a.api_stat_code=1
+		and (a.api_id,a.api_version) in
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+			(#{item.apiId},#{item.apiVersion})
+		</foreach>
+		order by 1,3
+	</select>
+
+</mapper>

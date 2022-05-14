@@ -1,0 +1,70 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Built-By: houbl
+Class-Path: ../conf/client/ ../applib/openapi-framework.jar ../lib/slf
+ 4j-api-1.6.1.jar ../lib/slf4j-nop-1.6.4.jar ../lib/log4j-1.2.16.jar .
+ ./lib/jackson-mapper-asl-1.9.13.jar ../lib/jackson-core-asl-1.9.13.ja
+ r ../lib/jackson-jaxrs-1.9.13.jar ../lib/jackson-xc-1.9.13.jar ../lib
+ /jackson-databind-2.5.3.jar ../lib/jackson-core-2.5.3.jar ../lib/jack
+ son-annotations-2.5.3.jar ../lib/jodd-core-3.6.6.jar ../lib/hutool-2.
+ 15.1.jar ../lib/commons-beanutils-1.7.0.jar ../lib/commons-collection
+ s-3.2.1.jar ../lib/commons-chain-1.2.jar ../lib/commons-codec-1.6.jar
+  ../lib/commons-dbutils-1.6.jar ../lib/commons-digester-2.0.jar ../li
+ b/commons-io-1.3.2.jar ../lib/commons-fileupload-1.2.1.jar ../lib/com
+ mons-lang-2.6.jar ../lib/commons-lang3-3.1.jar ../lib/commons-email-1
+ .2.jar ../lib/mail-1.4.1.jar ../lib/activation-1.1.jar ../lib/commons
+ -logging-1.0.4.jar ../lib/commons-logging-api-1.1.jar ../lib/commons-
+ validator-1.3.1.jar ../lib/commons-net-3.3.jar ../lib/mybatis-3.2.8.j
+ ar ../lib/mybatis-spring-1.2.2.jar ../lib/mybatis-generator-core-1.3.
+ 2.jar ../lib/mybatis-paginator-1.2.9.jar ../lib/druid-1.0.14.jar ../l
+ ib/json-lib-2.1-jdk15.jar ../lib/ezmorph-1.0.3.jar ../lib/fastjson-1.
+ 2.4.jar ../lib/gson-2.2.4.jar ../lib/jedis-2.8.1.jar ../lib/commons-p
+ ool2-2.4.2.jar ../lib/akka-actor_2.10-2.3.14.jar ../lib/scala-library
+ -2.10.4.jar ../lib/config-1.2.1.jar ../lib/akka-slf4j_2.10-2.3.14.jar
+  ../lib/akka-remote_2.10-2.3.14.jar ../lib/netty-3.8.0.Final.jar ../l
+ ib/protobuf-java-2.5.0.jar ../lib/uncommons-maths-1.2.2a.jar ../lib/a
+ kka-cluster_2.10-2.3.14.jar ../lib/akka-testkit_2.10-2.3.14.jar ../li
+ b/akka-zeromq_2.10-2.3.14.jar ../lib/zeromq-scala-binding_2.10-0.0.7.
+ jar ../lib/jna-3.0.9.jar ../lib/jnr-constants-0.8.2.jar ../lib/akka-c
+ amel_2.10-2.3.14.jar ../lib/camel-core-2.10.3.jar ../lib/spring-core-
+ 4.2.5.RELEASE.jar ../lib/spring-beans-4.2.5.RELEASE.jar ../lib/spring
+ -context-4.2.5.RELEASE.jar ../lib/spring-aop-4.2.5.RELEASE.jar ../lib
+ /aopalliance-1.0.jar ../lib/spring-tx-4.2.5.RELEASE.jar ../lib/spring
+ -expression-4.2.5.RELEASE.jar ../lib/spring-aspects-4.2.5.RELEASE.jar
+  ../lib/aspectjweaver-1.8.8.jar ../lib/spring-context-support-4.2.5.R
+ ELEASE.jar ../lib/spring-jdbc-4.2.5.RELEASE.jar ../lib/spring-web-4.2
+ .5.RELEASE.jar ../lib/spring-webmvc-4.2.5.RELEASE.jar ../lib/spring-t
+ est-4.2.5.RELEASE.jar ../lib/testng-6.9.10.jar ../lib/jcommander-1.48
+ .jar ../lib/bsh-2.0b4.jar ../lib/unitils-core-3.3.jar ../lib/ognl-2.6
+ .9.jar ../lib/unitils-testng-3.3.jar ../lib/testng-5.8-jdk15.jar ../l
+ ib/unitils-spring-3.3.jar ../lib/unitils-database-3.3.jar ../lib/unit
+ ils-dbmaintainer-3.3.jar ../lib/hibernate-3.2.5.ga.jar ../lib/ehcache
+ -1.2.3.jar ../lib/asm-attrs-1.5.3.jar ../lib/dom4j-1.6.1.jar ../lib/a
+ ntlr-2.7.7.jar ../lib/cglib-2.1_3.jar ../lib/asm-1.5.3.jar ../lib/dbu
+ nit-2.2.2.jar ../lib/junit-addons-1.4.jar ../lib/xmlParserAPIs-2.6.2.
+ jar ../lib/poi-2.5.1-final-20040804.jar ../lib/commons-dbcp-1.2.2.jar
+  ../lib/commons-pool-1.3.jar ../lib/postgresql-9.1.jar ../lib/slick_2
+ .10-3.1.1.jar ../lib/reactive-streams-1.0.0.jar ../lib/slick-hikaricp
+ _2.10-3.1.1.jar ../lib/HikariCP-java6-2.3.7.jar ../lib/javassist-3.19
+ .0-GA.jar ../lib/slick-codegen_2.10-3.1.1.jar ../lib/scalatest_2.10-3
+ .0.0-M15.jar ../lib/scalactic_2.10-3.0.0-M15.jar ../lib/scala-reflect
+ -2.10.4.jar ../lib/scalaz-core_2.10-7.2.2.jar ../lib/jackson-dataform
+ at-xml-2.5.3.jar ../lib/jackson-module-jaxb-annotations-2.5.3.jar ../
+ lib/stax2-api-3.1.4.jar ../lib/jetty-all-8.1.18.v20150929.jar ../lib/
+ javax.servlet-3.0.0.v201112011016.jar ../lib/javax.servlet-api-3.1.0.
+ jar ../lib/jstl-1.2.jar ../lib/netty-all-4.0.26.Final.jar ../lib/hibe
+ rnate-validator-4.2.0.Final.jar ../lib/validation-api-1.0.0.GA.jar../
+ lib/avro-mapred-1.7.7-hadoop2.jar../lib/hadoop-client-2.6.2.jar../lib
+ /hadoop-common-2.6.2.jar../lib/hadoop-auth-2.6.2.jar../lib/hadoop-map
+ reduce-client-app-2.6.2.jar../lib/hadoop-mapreduce-client-common-2.6.
+ 2.jar../lib/hadoop-yarn-client-2.6.2.jar../lib/hadoop-yarn-server-com
+ mon-2.6.2.jar../lib/hadoop-mapreduce-client-shuffle-2.6.2.jar../lib/h
+ adoop-yarn-api-2.6.2.jar../lib/hadoop-mapreduce-client-core-2.6.2.jar
+ ../lib/hadoop-yarn-common-2.6.2.jar../lib/hadoop-mapreduce-client-job
+ client-2.6.2.jar../lib/hadoop-annotations-2.6.2.jar../lib/hadoop-hdfs
+ -2.6.2.jar../lib/parquet-hadoop-1.7.0.jar../lib/parquet-hadoop-bundle
+ -1.6.0.jar../lib/hadoop-common-2.6.0-cdh5.5.2.jar ../lib/guava-14.0.1.jar
+Created-By: Apache Maven 3.2.5
+Build-Jdk: 1.8.0_72
+Main-Class: com.teradata.openapi.httpserver.jetty.Bootstrap
+

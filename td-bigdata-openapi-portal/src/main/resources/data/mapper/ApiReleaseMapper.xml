@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teradata.portal.web.apiRelease.dao.ApiReleaseMapper" >
+    <resultMap id="ApiSortResultMap" type="java.util.HashMap" >
+        <id column="api_sort" property="apiSort" jdbcType="INTEGER" />
+        <result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+        <result column="api_sort_desc" property="apiSortDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="ApiSort_Column_List" >
+        api_sort, api_sort_name, api_sort_desc
+    </sql>
+    <resultMap id="ApiCodeResultMap" type="java.util.HashMap" >
+        <id column="code_type" property="codeType" jdbcType="VARCHAR" />
+        <id column="code_id" property="codeId" jdbcType="INTEGER" />
+        <result column="code_desc" property="codeDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="ApiCode_Column_List" >
+        code_type, code_id, code_desc
+    </sql>
+    <resultMap id="ApiInfoResultMap" type="com.teradata.portal.web.apiRelease.pojo.ApiInfo" >
+        <id column="api_id" property="apiId" jdbcType="INTEGER" />
+        <id column="api_version" property="apiVersion" jdbcType="INTEGER" />
+        <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+        <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+        <result column="api_sort" property="apiSort" jdbcType="INTEGER" />
+        <result column="data_strct_type_code" property="dataStrctTypeCode" jdbcType="INTEGER" />
+        <result column="relse_type" property="relseType" jdbcType="INTEGER" />
+        <result column="api_name" property="apiName" jdbcType="VARCHAR" />
+        <result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+        <result column="data_cycle_type" property="dataCycleType" jdbcType="INTEGER" />
+        <result column="relse_persn" property="relsePersn" jdbcType="VARCHAR" />
+        <result column="relse_time" property="relseTime" jdbcType="TIMESTAMP" />
+        <result column="tab_scale_type" property="tabScaleType" jdbcType="INTEGER" />
+        <result column="exam_stat" property="examStat" jdbcType="INTEGER" />
+        <result column="trigger_methd" property="triggerMethd" jdbcType="INTEGER" />
+        <result column="api_visit_methd" property="apiVisitMethd" jdbcType="VARCHAR" />
+        <!-- desc_begin -->
+        <result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+        <result column="data_cycle_desc" property="dataCycleDesc" jdbcType="VARCHAR" />
+        <result column="exam_stat_desc" property="examStatDesc" jdbcType="VARCHAR" />
+        <result column="api_stat_desc" property="apiStatDesc" jdbcType="VARCHAR" />
+        <result column="api_cls_desc" property="apiClsDesc" jdbcType="VARCHAR" />
+        <result column="trigger_methd_desc" property="triggerMethdDesc" jdbcType="VARCHAR" />
+        <result column="audit_advc" property="auditAdvc" jdbcType="VARCHAR" />
+        <!-- desc_end -->
+    </resultMap>
+
+    <resultMap id="SourceInfoResultMap" type="java.util.HashMap">
+        <id column="source_id" jdbcType="INTEGER" property="sourceId" />
+        <result column="source_type_code" jdbcType="CHAR" property="sourceTypeCode" />
+        <result column="drv_code" jdbcType="INTEGER" property="drvCode" />
+        <result column="source_desc" jdbcType="VARCHAR" property="sourceDesc" />
+        <result column="ip_addr" jdbcType="VARCHAR" property="ipAddr" />
+        <result column="port" jdbcType="INTEGER" property="port" />
+        <result column="deflt_schema" jdbcType="VARCHAR" property="defltSchema" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="pwd" jdbcType="VARCHAR" property="pwd" />
+        <result column="priority" jdbcType="INTEGER" property="priority" />
+        <result column="sync_strategy_id" jdbcType="INTEGER" property="syncStrategyId" />
+        <result column="asyn_strategy_id" jdbcType="INTEGER" property="asynStrategyId" />
+    </resultMap>
+
+    <resultMap id="SorcTabInfoMap" type="java.util.HashMap" >
+        <result column="source_id" property="sourceId" jdbcType="INTEGER" />
+        <result column="schema_name" property="schemaName" jdbcType="VARCHAR" />
+        <result column="tab_name" property="tabName" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="SorcTabInfo_Column_List" >
+        source_id, schema_name, tab_name
+    </sql>
+
+    <resultMap id="SorcFieldInfoResultMap" type="com.teradata.portal.web.apiRelease.pojo.SorcFieldInfo" >
+        <result column="source_id" property="sourceId" jdbcType="INTEGER" />
+        <result column="schema_name" property="schemaName" jdbcType="VARCHAR" />
+        <result column="tab_name" property="tabName" jdbcType="VARCHAR" />
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+        <result column="field_title" property="fieldTitle" jdbcType="VARCHAR" />
+        <result column="sorc_field_type" property="sorcFieldType" jdbcType="VARCHAR" />
+        <result column="sorc_form" property="sorcForm" jdbcType="VARCHAR" />
+        <result column="sorc_field_len" property="sorcFieldLen" jdbcType="INTEGER" />
+        <result column="sorc_total_digit" property="sorcTotalDigit" jdbcType="INTEGER" />
+        <result column="field_targt_type" property="fieldTargtType" jdbcType="VARCHAR" />
+        <result column="pi_flag" property="piFlag" jdbcType="INTEGER" />
+        <result column="ppi_flag" property="ppiFlag" jdbcType="INTEGER" />
+        <result column="ppi_type" property="ppiType" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="SorcFieldInfo_Column_List" >
+        source_id, schema_name, tab_name, field_name, field_title,
+        sorc_field_type, sorc_form, sorc_field_len, sorc_total_digit,
+        field_targt_type, pi_flag, ppi_flag, ppi_type
+    </sql>
+
+    <resultMap id="DataTargtTypeCodeResultMap" type="java.util.HashMap" >
+        <id column="field_targt_type" property="fieldTargtType" jdbcType="VARCHAR" />
+        <result column="field_targt_type_len" property="fieldTargtTypeLen" jdbcType="INTEGER" />
+        <result column="field_targt_type_desc" property="fieldTargtTypeDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="DataTargtTypeCode_Column_List" >
+        field_targt_type, field_targt_type_len, field_targt_type_desc
+    </sql>
+
+    <resultMap id="CalcPrincCodeResultMap" type="java.util.HashMap" >
+        <id column="calc_princ_id" property="calcPrincId" jdbcType="INTEGER" />
+        <result column="calc_princ_desc" property="calcPrincDesc" jdbcType="VARCHAR" />
+        <result column="calc_formula" property="calcFormula" jdbcType="VARCHAR" />
+        <result column="subhd_type" property="subhdType" jdbcType="CHAR" />
+        <result column="arg_form" property="argForm" jdbcType="VARCHAR" />
+        <result column="arg_samp" property="argSamp" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="CalcPrincCode_Column_List" >
+        calc_princ_id, calc_princ_desc, calc_formula, subhd_type, arg_form, arg_samp
+    </sql>
+
+    <!-- 获取api类型信息 -->
+    <!-- 暂时取一级目录 -->
+    <select id="queryApiSort" resultMap="ApiSortResultMap">
+        select
+        <include refid="ApiSort_Column_List" />
+        from opi.api_sort_code
+        where api_sort_lvl = 1
+        order by api_sort
+    </select>
+
+    <!-- 获取api状态信息 -->
+    <select id="queryApiStat" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'api_stat_code'
+        order by code_id
+    </select>
+
+    <!-- 获取api数据规模信息 -->
+    <select id="queryApiTabScale" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'tab_scale_type'
+        order by code_id
+    </select>
+
+    <!-- 获取api周期类型信息 -->
+    <select id="queryApiDataCycle" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'data_cycle_type'
+        order by code_id
+    </select>
+
+    <!-- 获取api大类类型信息 -->
+    <select id="queryApiCls" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'api_cls_code'
+        order by code_id
+    </select>
+
+    <!-- 获取api触发方式信息 -->
+    <select id="queryTriggerMethd" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'trigger_methd_code'
+        order by code_id
+    </select>
+
+    <!-- 获取api状态信息 -->
+    <select id="queryApiExamStat" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'api_exam_stat_code'
+        order by code_id
+    </select>
+
+    <!-- 获取必选参数信息 -->
+    <select id="queryArgMustCode" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'arg_must_code'
+        order by code_id
+    </select>
+
+    <!-- 获取目标字段类型信息 -->
+    <select id="queryDataTargtTypeCode" resultMap="DataTargtTypeCodeResultMap">
+        select
+        <include refid="DataTargtTypeCode_Column_List" />
+        from opi.data_targt_type_code
+        order by field_targt_type
+    </select>
+
+    <!-- 获取计算法则类型信息 -->
+    <select id="queryCalcPrincCode" resultMap="CalcPrincCodeResultMap">
+        select
+        <include refid="CalcPrincCode_Column_List" />
+        from opi.calc_princ_code
+        order by calc_princ_id
+    </select>
+
+    <!-- 获取api列表信息 -->
+    <select id="queryApiInfo" resultMap="ApiInfoResultMap">
+        select t1.api_sort, t2.api_sort_name, t1.api_id, t1.api_name, t1.api_desc,
+        t4.code_desc as data_cycle_desc,
+        t1.api_version,
+        t1.relse_time,
+        t8.user_name as relse_persn,
+        t1.api_stat_code,
+        t3.code_desc as api_stat_desc,
+        t1.api_cls_code,
+        t5.code_desc as api_cls_desc,
+        t1.tab_scale_type,
+        t1.data_cycle_type,
+        t1.trigger_methd,
+        t6.code_desc as trigger_methd_desc,
+        t1.exam_stat,
+        t7.code_desc as exam_stat_desc,
+        t9.audit_advc,
+        t1.api_visit_methd
+        from	opi.api_info t1
+        left join opi.api_sort_code t2
+        on	t1.api_sort = t2.api_sort
+        left join opi.api_code t3
+        on	t1.api_stat_code = t3.code_id
+        and t3.code_type = 'api_stat_code'
+        left join opi.api_code t4
+        on t1.data_cycle_type = t4.code_id
+        and t4.code_type = 'data_cycle_type'
+        left join opi.api_code t5
+        on t1.api_cls_code = t5.code_id
+        and t5.code_type = 'api_cls_code'
+        left join opi.api_code t6
+        on t1.trigger_methd = t6.code_id
+        and t6.code_type = 'trigger_methd_code'
+        left join opi.api_code t7
+        on t1.exam_stat = t7.code_id
+        and t7.code_type = 'api_exam_stat_code'
+        left join opi.user_info t8
+        on t1.relse_persn = CAST (t8.user_id AS text)
+        left join opi.api_exam_info t9
+        on t1.api_id = t9.api_id
+        and t1.api_version = t9.api_version
+        and t9.isnt_eff = 1
+        <where>
+            <if test="apiSort != -1">
+                and t1.api_sort = #{apiSort}
+            </if>
+            <if test="apiId != -1">
+                and CAST (t1.api_id AS text) LIKE CONCAT('%',#{apiId},'%')
+            </if>
+            <if test="apiName != ''">
+                and t1.api_name LIKE CONCAT('%',#{apiName},'%')
+            </if>
+            <if test="beginDate != null">
+                and t1.relse_time &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                and t1.relse_time &lt;= #{endDate}
+            </if>
+            <if test="examStat != -1">
+                and t1.exam_stat = #{examStat}
+            </if>
+            <if test="apiRange == 1">
+                and t1.relse_persn = #{userId}
+            </if>
+        </where>
+        order by t1.relse_time DESC
+        offset #{offset} limit #{limit}
+    </select>
+
+    <!-- 新增api -->
+    <insert id="insertApiItem" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        insert into opi.api_info(api_id, api_version, api_cls_code, api_stat_code, api_sort, data_strct_type_code, relse_type, api_name,
+                                 api_desc, data_cycle_type, relse_persn, relse_time, tab_scale_type, api_class_name, trigger_methd, exam_stat, api_visit_methd)
+        values(#{apiId}, #{apiVersion}, #{apiClsCode}, #{apiStatCode}, #{apiSort}, #{dataStrctTypeCode}, #{relseType}, #{apiName}, #{apiDesc}, #{dataCycleType}, #{relsePersn}, CURRENT_TIMESTAMP(6), #{tabScaleType}, #{apiClassName}, #{triggerMethd}, #{examStat}, #{apiVisitMethd})
+    </insert>
+
+    <!-- 删除api -->
+    <delete id="deleteApiItem" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        delete from opi.api_info
+        where api_id = #{apiId}
+              and api_version = #{apiVersion}
+    </delete>
+
+    <!-- 修改api -->
+    <update id="updateApiItem" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        update opi.api_info
+        <set>
+            <if test="apiDesc != ''">
+                api_desc = #{apiDesc},
+            </if>
+            <if test="apiClsCode != null">
+                api_cls_code = #{apiClsCode},
+            </if>
+            <if test="apiSort != null">
+                api_sort = #{apiSort},
+            </if>
+            <if test="tabScaleType != null">
+                tab_scale_type = #{tabScaleType},
+            </if>
+            <if test="dataCycleType != null">
+                data_cycle_type = #{dataCycleType},
+            </if>
+            <if test="apiStatCode != null">
+                api_stat_code = #{apiStatCode},
+            </if>
+            <if test="triggerMethd != null">
+                trigger_methd = #{triggerMethd},
+            </if>
+            <if test="apiVisitMethd != null">
+                api_visit_methd = #{apiVisitMethd},
+            </if>
+            relse_time = CURRENT_TIMESTAMP(6)
+        </set>
+        where api_id = #{apiId}
+        and api_version = #{apiVersion}
+    </update>
+
+    <!-- 页面发布api -->
+    <update id="releaseApiItem" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        update opi.api_info
+        <set>
+            <if test="examStat != ''">
+                exam_stat = #{examStat},
+            </if>
+        </set>
+        where api_id = #{apiId}
+        and api_version = #{apiVersion}
+    </update>
+
+    <!-- 克隆api信息 -->
+    <select id="queryLatestVersion" resultType="java.lang.Integer">
+        select MAX(api_version) as api_version
+        from opi.api_info
+        where api_id= #{apiId}
+    </select>
+    <insert id="cloneApiItem" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        insert into opi.api_info(api_id, api_version, api_cls_code
+            ,api_stat_code, api_sort, data_strct_type_code, relse_type
+            , api_name,api_desc, data_cycle_type, relse_persn
+            ,relse_time, tab_scale_type,
+                                 exam_stat, api_class_name, trigger_methd)
+            select api_id,
+                #{newApiVersion},
+                api_cls_code,1,
+                api_sort,data_strct_type_code,relse_type
+                , api_name, api_desc,
+                data_cycle_type, #{relsePersn}, CURRENT_TIMESTAMP(6),
+                tab_scale_type,
+                0,'',trigger_methd
+            from opi.api_info
+            where api_id = #{apiId}
+                  and api_version = #{apiVersion}
+    </insert>
+
+    <insert id="cloneApiArg" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        insert into opi.struct_api_arg (api_id, api_version, field_alias,
+                                        field_name, field_eff_stat, field_sorc_type,
+                                        field_targt_type, field_title, must_type,
+                                        must_one_grp_id, req_arg_id, req_arg_deflt_val,
+                                        respn_arg_id, respn_arg_samp_val, field_file_desc,
+                                        calc_princ_id, value_range)
+            select api_id,
+                #{newApiVersion},
+                field_alias,
+                field_name, field_eff_stat, field_sorc_type,
+                field_targt_type, field_title, must_type,
+                must_one_grp_id, req_arg_id, req_arg_deflt_val,
+                respn_arg_id, respn_arg_samp_val, field_file_desc,
+                calc_princ_id, value_range
+            from opi.struct_api_arg
+            where api_id = #{apiId}
+                  and api_version = #{apiVersion}
+    </insert>
+
+    <insert id="cloneApiTabInfo" parameterType="com.teradata.portal.web.apiRelease.pojo.ApiInfo">
+        insert into opi.api_tab_info(
+            api_id,api_version,source_id,schema_name,tab_name,tab_alias,
+            field_name,field_alias,field_type,field_len,field_tot_digit,field_prec_digit)
+            select
+                api_id,
+                #{newApiVersion},
+                source_id,schema_name,tab_name,tab_alias,
+                field_name,field_alias,field_type,field_len,field_tot_digit,field_prec_digit
+            from opi.api_tab_info
+            where api_id = #{apiId}
+                  and api_version = #{apiVersion}
+    </insert>
+
+    <!-- 获取数据源信息 -->
+    <select id="querySource" resultMap="SourceInfoResultMap">
+        select source_id, source_desc
+        from opi.source_info
+        order by 1
+    </select>
+
+    <!-- 获取库信息 -->
+    <select id="querySchema" resultMap="SorcTabInfoMap">
+        select distinct source_id, schema_name from opi.sorc_tab_info
+        where source_id = #{sourceId}
+        order by 2
+    </select>
+
+    <!-- 获取表信息 -->
+    <select id="queryTable" resultMap="SorcTabInfoMap">
+        select source_id, schema_name, tab_name from opi.sorc_tab_info
+        where source_id = #{sourceId}
+              and schema_name = #{schemaName}
+              and UPPER(tab_name) LIKE CONCAT('%',UPPER(#{q}),'%')
+    </select>
+
+    <!-- 获取不同数据源的字段 -->
+    <resultMap id="querySourceFieldResultMap" type="com.teradata.portal.web.apiRelease.pojo.SorcFieldRst" >
+        <id column="field_name" property="fieldName" jdbcType="VARCHAR" />
+        <collection property="fieldTypeList" resultMap="FieldTypeInfoResultMap"></collection>
+        <collection property="sourceFieldList" resultMap="SourceFieldInfoResultMap"></collection>
+    </resultMap>
+    <!-- 一个字段在选择的数据源中有多少种类型 -->
+    <resultMap id="FieldTypeInfoResultMap" type="com.teradata.portal.web.apiRelease.pojo.FieldTypeInfo" >
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+        <result column="field_targt_type" property="fieldTargtType" jdbcType="VARCHAR" />
+    </resultMap>
+    <!-- 选择的数据源中有多少个包含某个字段 -->
+    <resultMap id="SourceFieldInfoResultMap" type="com.teradata.portal.web.apiRelease.pojo.SourceFieldInfo" >
+        <result column="source_id" property="sourceId" jdbcType="INTEGER" />
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+    </resultMap>
+    <select id="querySourceField" resultMap="querySourceFieldResultMap">
+        <foreach collection="param" item="item" separator=" union ">
+            select field_name, field_targt_type, source_id
+            from opi.sorc_field_info_vw
+            where source_id ::text = #{item.sourceId}
+            and schema_name = #{item.schemaName}
+            and tab_name = #{item.tabName}
+        </foreach>
+        order by 1
+    </select>
+
+    <!-- 获取来源字段详细信息 -->
+    <!-- 因现在是单标冗余，现在tab_alias暂时写死T1 -->
+    <resultMap id="queryFieldSorcTypeResultMap" type="java.util.Map" >
+        <result column="source_id" property="sorc_id" jdbcType="INTEGER" />
+        <result column="schema_name" property="schemaName" jdbcType="VARCHAR" />
+        <result column="tab_name" property="tabName" jdbcType="VARCHAR" />
+        <result column="tab_alias" property="tabAlias" jdbcType="VARCHAR" />
+        <result column="sorc_field_type" property="sorc_field_type" jdbcType="VARCHAR" />
+        <result column="sorc_form" property="sorc_format" jdbcType="VARCHAR" />
+        <result column="sorc_field_len" property="sorc_max_len" jdbcType="INTEGER" />
+        <result column="sorc_total_digit" property="sorc_total_digit" jdbcType="INTEGER" />
+        <result column="sorc_prec_digit" property="sorc_prec_digit" jdbcType="INTEGER" />
+    </resultMap>
+    <sql id="queryFieldSorcType_Column_List">
+        source_id, schema_name, tab_name, sorc_field_type,
+        sorc_form, sorc_field_len,
+        sorc_total_digit, sorc_prec_digit
+    </sql>
+
+    <select id="queryFieldSorcType" resultMap="queryFieldSorcTypeResultMap">
+        <foreach collection="param1" item="item" separator=" union all ">
+            select  <include refid="queryFieldSorcType_Column_List" /> , 'T1' as tab_alias
+            from opi.sorc_field_info_vw
+            where source_id ::text = #{item.sourceId}
+            and schema_name = #{item.schemaName}
+            and tab_name = #{item.tabName}
+            and field_name = #{fieldName}
+        </foreach>
+        order by source_id
+    </select>
+
+    <!-- 删除apiArg信息 -->
+    <delete id="deleteApiArg">
+        delete from opi.struct_api_arg
+        where api_id = #{apiId}
+              and api_version = #{apiVersion}
+        ;
+        delete from opi.api_tab_info
+        where api_id = #{apiId}
+              and api_version = #{apiVersion}
+        ;
+    </delete>
+    <!-- 新增apiArg信息 -->
+    <insert id="insertApiArg" parameterType="com.teradata.portal.web.apiRelease.pojo.StructApiArg">
+        insert into opi.struct_api_arg (api_id, api_version, field_alias,
+                                        field_name, field_eff_stat, field_sorc_type,
+                                        field_targt_type, field_title,
+                                        sync_must_type, sync_must_one_grp_id,
+                                        asyn_must_type, asyn_must_one_grp_id,
+                                        rss_must_type, rss_must_one_grp_id,
+                                        req_arg_id, req_arg_deflt_val,
+                                        respn_arg_id, respn_arg_samp_val, field_file_desc,
+                                        calc_princ_id, value_range)
+        values (#{apiId,jdbcType=INTEGER}, #{apiVersion,jdbcType=INTEGER}, #{fieldAlias,jdbcType=VARCHAR},
+                                           #{fieldName,jdbcType=VARCHAR}, #{fieldEffStat,jdbcType=INTEGER}, #{fieldSorcType,jdbcType=VARCHAR},
+                                           #{fieldTargtType,jdbcType=VARCHAR}, #{fieldTitle,jdbcType=VARCHAR},
+                                           #{syncMustType,jdbcType=INTEGER}, #{syncMustOneGrpId,jdbcType=INTEGER},
+                                           #{asynMustType,jdbcType=INTEGER}, #{asynMustOneGrpId,jdbcType=INTEGER},
+                                                                             #{rssMustType,jdbcType=INTEGER}, #{rssMustOneGrpId,jdbcType=INTEGER},
+                                                                             #{reqArgId,jdbcType=CHAR}, #{reqArgDefltVal,jdbcType=VARCHAR},
+                                                                             #{respnArgId,jdbcType=CHAR}, #{respnArgSampVal,jdbcType=VARCHAR}, #{fieldFileDesc,jdbcType=VARCHAR},
+                                                                             #{calcPrincId,jdbcType=INTEGER}, #{valueRange,jdbcType=VARCHAR})
+    </insert>
+
+    <!-- 新增api_tab_info -->
+    <insert id="insertApiTabInfo">
+        <foreach collection="param1" item="item" separator=";">
+            insert into opi.api_tab_info(
+            api_id,api_version,source_id,schema_name,tab_name,tab_alias,
+            field_name,field_alias,field_type,field_len,field_tot_digit,field_prec_digit
+            )
+            select #{apiId}, #{apiVersion}, cast(#{item.sourceId} as integer), #{item.schemaName}, #{item.tabName}, 'T1',
+            #{fieldName}, #{fieldName}, sorc_field_type, sorc_field_len, sorc_total_digit, sorc_prec_digit
+            from opi.sorc_field_info_vw
+            where source_id ::text = #{item.sourceId}
+            and schema_name = #{item.schemaName}
+            and tab_name = #{item.tabName}
+            and field_name = #{fieldName}
+        </foreach>
+    </insert>
+
+    <!-- 查询apiArg信息 -->
+    <resultMap id="ApiArgFieldInfoResultMap" type="com.teradata.portal.web.apiRelease.pojo.StructApiArg" >
+        <id column="api_id" property="apiId" jdbcType="INTEGER" />
+        <id column="api_version" property="apiVersion" jdbcType="INTEGER" />
+        <id column="field_alias" property="fieldAlias" jdbcType="VARCHAR" />
+        <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+        <result column="field_eff_stat" property="fieldEffStat" jdbcType="INTEGER" />
+        <result column="field_sorc_type" property="fieldSorcType" jdbcType="VARCHAR" />
+        <result column="field_targt_type" property="fieldTargtType" jdbcType="VARCHAR" />
+        <result column="field_title" property="fieldTitle" jdbcType="VARCHAR" />
+        <result column="sync_must_type" property="syncMustType" jdbcType="INTEGER" />
+        <result column="sync_must_type_desc" property="syncMustTypeDesc" jdbcType="VARCHAR" />
+        <result column="sync_must_one_grp_id" property="syncMustOneGrpId" jdbcType="INTEGER" />
+        <result column="asyn_must_type" property="asynMustType" jdbcType="INTEGER" />
+        <result column="asyn_must_type_desc" property="asynMustTypeDesc" jdbcType="VARCHAR" />
+        <result column="asyn_must_one_grp_id" property="asynMustOneGrpId" jdbcType="INTEGER" />
+        <result column="rss_must_type" property="rssMustType" jdbcType="INTEGER" />
+        <result column="rss_must_type_desc" property="rssMustTypeDesc" jdbcType="VARCHAR" />
+        <result column="rss_must_one_grp_id" property="rssMustOneGrpId" jdbcType="INTEGER" />
+        <result column="req_arg_id" property="reqArgId" jdbcType="CHAR" />
+        <result column="req_arg_deflt_val" property="reqArgDefltVal" jdbcType="VARCHAR" />
+        <result column="respn_arg_id" property="respnArgId" jdbcType="CHAR" />
+        <result column="respn_arg_samp_val" property="respnArgSampVal" jdbcType="VARCHAR" />
+        <result column="field_file_desc" property="fieldFileDesc" jdbcType="VARCHAR" />
+        <result column="calc_princ_id" property="calcPrincId" jdbcType="INTEGER" />
+        <result column="calc_princ_desc" property="calcPrincDesc" jdbcType="VARCHAR" />
+        <result column="value_range" property="valueRange" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="queryApiArgResultMap" type="com.teradata.portal.web.apiRelease.pojo.ApiArgRst" >
+        <result column="source_id" property="sourceId" jdbcType="INTEGER" />
+        <result column="source_desc" property="sourceDesc" jdbcType="VARCHAR" />
+        <result column="schema_name" property="schemaName" jdbcType="VARCHAR" />
+        <result column="tab_name" property="tabName" jdbcType="VARCHAR" />
+        <association property="fieldList" resultMap="ApiArgFieldInfoResultMap"></association>
+    </resultMap>
+
+    <select id="queryApiArg" resultMap="queryApiArgResultMap">
+        select t1.source_id, t1.schema_name, t1.tab_name,t2.field_name,
+            t2.field_eff_stat,
+            t2.field_targt_type, t2.field_title,
+            t2.sync_must_type,
+            t2.sync_must_one_grp_id,
+            t2.asyn_must_type,
+            t2.asyn_must_one_grp_id,
+            t2.rss_must_type,
+            t2.rss_must_one_grp_id,
+            t2.req_arg_id, t2.req_arg_deflt_val,
+            t2.respn_arg_id, t2.respn_arg_samp_val, t2.field_file_desc,
+            t2.calc_princ_id, t2.value_range,
+            t3.source_desc,
+            t4.calc_princ_desc,
+            t5.code_desc as sync_must_type_desc,
+            t6.code_desc as asyn_must_type_desc,
+            t7.code_desc as rss_must_type_desc
+        from opi.api_tab_info t1
+            inner join opi.struct_api_arg t2
+                on	t1.api_id = t2.api_id
+                      and	t1.api_version = t2.api_version
+                      and	t1.field_name = t2.field_name
+            inner join opi.source_info t3
+                on t1.source_id = t3.source_id
+            inner join opi.calc_princ_code t4
+                on t2.calc_princ_id = t4.calc_princ_id
+            inner join opi.api_code t5
+                on t2.sync_must_type = t5.code_id
+                   and t5.code_type = 'arg_must_code'
+            inner join opi.api_code t6
+                on t2.asyn_must_type = t6.code_id
+                   and t6.code_type = 'arg_must_code'
+            inner join opi.api_code t7
+                on t2.rss_must_type = t7.code_id
+                   and t7.code_type = 'arg_must_code'
+        where t1.api_id = #{apiId}
+              and	t1.api_version = #{apiVersion}
+    </select>
+
+    <!-- 插入错误日志表 -->
+    <insert id="insertErrAbnorm">
+        insert into opi.err_abnorm_info
+        (err_abnorm_id, err_abnorm_surc, req_url, respn_err_val, err_time, repr_flag, repr_proc, repr_time)
+        values
+            (#{errAbnormId}, #{errAbnormSurc}, #{reqUrl}, #{respnErrVal}, CURRENT_TIMESTAMP(6), -1, null, null)
+    </insert>
+</mapper>

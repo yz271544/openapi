@@ -1,0 +1,88 @@
+package com.teradata.openapi.httpclient
+
+import java.io.{BufferedWriter, File, FileWriter}
+
+import scala.util.{Failure, Success}
+import scala.concurrent.duration._
+import akka.actor.ActorSystem
+import akka.pattern.ask
+import akka.event.Logging
+import akka.io.IO
+import com.teradata.openapi.util.HttpClientEnv
+import spray.json.{DefaultJsonProtocol, JsonFormat}
+import spray.can.Http
+import spray.httpx.SprayJsonSupport
+import spray.client.pipelining._
+import spray.util._
+
+/**
+  * Created by John on 2016/11/22.
+  */
+case class ApiResult(retCode: String, retMsg: String, reqID: String, reqStat: String)
+
+object CmccJsonProtocol extends DefaultJsonProtocol {
+  implicit val cmccApiResultFormat = jsonFormat4(ApiResult.apply)
+//  implicit def cmccApiResultFormat[T: JsonFormat] = jsonFormat4(ApiResult.apply)
+}
+
+object GetHttpTools extends App {
+  // we need an ActorSystem to host our application in
+  implicit val system = ActorSystem("simple-spray-client")
+
+  import system.dispatcher
+
+  val log = Logging(system, getClass)
+  var url: String = ""
+
+  if (args.length > 0) {
+    url = if (args(0) != null) args(0) else ""
+  }
+  if (("" equals url) || (!url.startsWith("http"))) {
+    log.info("Invalid parameter, Please enter the correct URL.")
+    shutdown()
+    System.exit(1)
+  }
+  // execution context for futures below
+  log.info("Requesting the CMCC API {}", url)
+
+  import CmccJsonProtocol._
+  import SprayJsonSupport._
+
+  val pipeline = sendReceive ~> unmarshal[ApiResult]
+
+  val responseFuture = pipeline {
+    //Get("http://192.168.20.110:9080/restserver/router?appKey=qichao1&method=tb_rpt_bo_mon&version=1&format=json&locale=zh_CN&codeType=UTF-8&reqType=syn&fields=SHOULD_PAY_AMT,REGION_CODE,BARGAIN_NUM,SHOULD_PAY,CITY_CODE,DEAL_DATE&DEAL_DATE=201604&sign=5E4EA5737D4196DDDFBDB164B5FA60E2E1D348B5")
+    //Post("http://192.168.20.110:9080/restserver/router?appKey=qichao1&method=CycleRcd&version=1&format=json&locale=zh_CN&codeType=UTF-8&reqType=syn&fields=reqID,retCode,retMsg,reqStat&TABLENAME=TB_RPT_BO_MON&SOURCEID=1&SCHEMANAME=RPTMART3&CYCLECOLUMN=DEAL_DATE&UPDCYCLETYPE=ADD&CYCLEVALUS=201605&sign=B7207AC58FFBE18E0CC5D726F096389B982BD9DC")
+    Post(url)
+  }
+  responseFuture onComplete {
+    case Success(ApiResult(retCode, retMsg, reqID, reqStat)) =>
+      log.info("The retMsg {} of Mt. reqStat is: {} m",retMsg, reqStat)
+      shutdown()
+
+    case Success(somethingUnexpected) =>
+      log.warning("The Cmcc API call was successful but returned something unexpected: '{}'.", somethingUnexpected)
+      shutdown()
+
+    case Failure(error) =>
+      log.error(error, "Couldn't get elevation")
+      val fileName = String.format("%s/%s",HttpClientEnv.sourcePath,System.currentTimeMillis().toString)
+      log.debug("fileName:" + fileName)
+      try {
+        val file = new File(fileName)
+        if (!file.exists()) file.createNewFile()
+        val fileWriter = new FileWriter(file.getAbsoluteFile, true)
+        val bufferedWriter = new BufferedWriter(fileWriter)
+        bufferedWriter.write(url)
+        bufferedWriter.close()
+      } catch {
+        case e:Exception => log.error(error + " [error]:" + e.printStackTrace())
+      }
+      shutdown()
+  }
+
+  def shutdown(): Unit = {
+    IO(Http).ask(Http.CloseAll)(1.second).await
+    system.shutdown()
+  }
+}

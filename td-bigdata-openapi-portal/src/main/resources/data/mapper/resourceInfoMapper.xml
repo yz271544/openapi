@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.auth.dao.ResourceInfoMapper">
+
+    <resultMap id="resourceInfoResultMap" type="ResourceInfo" >
+        <id column="res_id" property="id" jdbcType="INTEGER" />
+        <result column="res_code" property="resCode" jdbcType="VARCHAR" />
+        <result column="fathr_res_id" property="parentId" jdbcType="INTEGER" />
+        <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+        <result column="res_name" property="name" jdbcType="VARCHAR" />
+        <result column="link" property="link" jdbcType="VARCHAR" />
+        <result column="icon" property="icon" jdbcType="VARCHAR" />
+        <result column="html_code" property="htmlCode" jdbcType="VARCHAR" />
+        <result column="css_code" property="cssCode" jdbcType="VARCHAR" />
+        <result column="res_type" property="ResType" jdbcType="INTEGER" />
+        <result column="isnt_eff" property="isntEff" jdbcType="INTEGER" />
+        <result column="isnt_leaf_node" property="isntLeafNode" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="resourceInfoWithRightResultMap" type="ResourceInfo" >
+
+        <id column="res_id" property="id" jdbcType="INTEGER" />
+        <result column="res_code" property="resCode" jdbcType="VARCHAR" />
+        <result column="fathr_res_id" property="parentId" jdbcType="INTEGER" />
+        <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+        <result column="res_name" property="name" jdbcType="VARCHAR" />
+        <result column="link" property="link" jdbcType="VARCHAR" />
+        <result column="icon" property="icon" jdbcType="VARCHAR" />
+        <result column="html_code" property="htmlCode" jdbcType="VARCHAR" />
+        <result column="css_code" property="cssCode" jdbcType="VARCHAR" />
+        <result column="res_type" property="ResType" jdbcType="INTEGER" />
+        <result column="isnt_eff" property="isntEff" jdbcType="INTEGER" />
+        <result column="isnt_leaf_node" property="isntLeafNode" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="right_field_val" property="rightFieldValue" jdbcType="INTEGER" />
+        <result column="right_main" property="rightMain" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <resultMap id="apiInfoResultMap" type="ApiInfo">
+        <id column="api_id" property="id" jdbcType="INTEGER" />
+        <result column="api_version" property="apiVersion" jdbcType="INTEGER" />
+        <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+        <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+        <result column="api_sort" property="parentId" jdbcType="INTEGER" />
+        <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+        <result column="data_strct_type_code" property="dataStrctTypeCode" jdbcType="INTEGER" />
+        <result column="relse_type" property="relseType" jdbcType="INTEGER" />
+        <result column="api_name" property="name" jdbcType="VARCHAR" />
+        <result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+        <result column="data_cycle_type" property="dataCycleType" jdbcType="INTEGER" />
+        <result column="relse_persn" property="relsePersn" jdbcType="INTEGER" />
+        <result column="relse_time" property="relseTime" jdbcType="TIMESTAMP" />
+        <result column="tab_scale_type" property="tabScaleType" jdbcType="INTEGER" />
+        <result column="exam_stat" property="examStat" jdbcType="INTEGER" />
+        <result column="api_class_name" property="apiClassName" jdbcType="VARCHAR" />
+        <result column="trigger_methd" property="triggerMethd" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="selectId">
+
+        res_id,
+        res_code,
+        fathr_res_id,
+        (select r.res_name from opi.resource_info r where r.res_id = resource_info.fathr_res_id ) parentName,
+        res_name,
+        link,
+        icon,
+        html_code,
+        css_code,
+        res_type,
+        isnt_eff,
+        isnt_leaf_node,
+        order_id
+
+    </sql>
+
+    <sql id="selectIdWithRight">
+
+        res_id,
+        res_code,
+        fathr_res_id,
+        (select r.res_name from opi.resource_info r where r.res_id = resource_info.fathr_res_id ) parentName,
+        res_name,
+        link,
+        icon,
+        html_code,
+        css_code,
+        res_type,
+        isnt_eff,
+        isnt_leaf_node,
+        order_id,
+        right_field_val,
+        right_main
+
+    </sql>
+    <!-- 查询API信息 -->
+    <sql id="selectApi">
+        api_id,
+        api_version,
+        api_cls_code,
+        api_stat_code,
+        api_sort,
+        (select api_sort_name from opi.api_sort_code t where t.api_sort = api_info.api_sort ) parentName,
+        data_strct_type_code,
+        relse_type,
+        api_name,
+        api_desc,
+        data_cycle_type,
+        relse_persn,
+        relse_time,
+        tab_scale_type,
+        exam_stat,
+        api_class_name,
+        trigger_methd
+    </sql>
+
+    <select id="queryAll" resultMap="resourceInfoResultMap" parameterType="ResourceInfo">
+        select
+        <include refid="selectId"/>
+        from opi.resource_info
+        order by order_id
+    </select>
+
+
+    <select id="count" parameterType="ResourceInfo" resultType="long">
+        select count(*)
+        from opi.resource_info where 1=1
+    </select>
+
+    <select id="isExist" resultMap="resourceInfoResultMap" parameterType="String">
+        select
+        <include refid="selectId"/>
+        from opi.resource_info
+        where res_name = #{name}
+    </select>
+
+    <select id="query" resultMap="resourceInfoResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="selectId"/>
+        from opi.resource_info
+    </select>
+
+    <!-- 通过资源id查找单个资源信息 -->
+    <select id="getById" parameterType="int" resultMap="resourceInfoResultMap">
+        select
+        <include refid="selectId"/>
+        from opi.resource_info where res_id = #{id}
+    </select>
+
+    <!-- 根据组Id查询页面资源 -->
+    <select id="findResInfoByGrpId" parameterType="int" resultMap="resourceInfoResultMap">
+        select
+        <include refid="selectId" />
+        from opi.resource_info
+        where res_id in (select right_field_val from opi.right_info where right_main_val = #{id})
+    </select>
+
+    <!-- 根据登录账号查询页面资源  -->
+    <select id="findResInfoByLoginAcct" parameterType="String" resultMap="resourceInfoResultMap">
+
+        select
+        <include refid="selectId" />
+        from opi.resource_info
+        where res_id in (select right_field_val from opi.right_info where right_main_val =
+        (select user_grp_id from opi.user_grp_relat where user_id =
+        (select user_id from opi.user_info where login_acct = #{loginAcct}) )
+        ) and res_type = 1 and isnt_eff = 1
+        order by res_id
+    </select>
+
+
+    <!-- 根据组id查找对应的权限资源信息，如果有则显示勾选状态  -->
+    <select id="findResAuthByGrpId" parameterType="int" resultMap="resourceInfoWithRightResultMap">
+        select
+        <include refid="selectIdWithRight" />
+        from opi.resource_info resource_info
+        left join (select right_field_val,right_main from opi.right_info where right_main_val = #{rightFieldValue} and right_main = 'group' and right_field = 'menu') t2
+        on resource_info.res_id = t2.right_field_val
+        where resource_info.res_type in (1,2) and res_type = 1
+        order by res_id
+    </select>
+
+    <!-- 根据用户id查找对应的权限资源信息，如果有则显示勾选状态  -->
+    <select id="findResAuthByUserId" parameterType="int" resultMap="resourceInfoWithRightResultMap">
+        select
+        <include refid="selectIdWithRight" />
+        from opi.resource_info resource_info
+        left join (select right_field_val,right_main from opi.right_info where right_main_val = #{rightFieldValue} and right_main = 'user' and right_field = 'menu') t2
+        on resource_info.res_id = t2.right_field_val
+        where resource_info.res_type in (1,2) and res_type = 1
+        order by res_id
+    </select>
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

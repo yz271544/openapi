@@ -1,0 +1,153 @@
+[{
+	"id" : -1,
+	"root" : true,
+	"leaf" : false,
+	"text" : "API目录",
+	"depth" : 0,
+	"expandable" : true,
+	"expanded" : true,
+	"children" : [{
+		"id" : 1001,
+		"root" : false,
+		"parentId" : -1,
+		"leaf" : false,
+		"index" : 0,
+		"text" : "开发平台",
+		"depth" : 1,
+		"expandable" : true,
+		"expanded" : true,
+		"children" : [{
+			"id" : 2105,
+			"root" : false,
+			"parentId" : 1001,
+			"leaf" : false,
+			"index" : 4,
+			"text" : "帮助扩展",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2101,
+			"root" : false,
+			"parentId" : 1001,
+			"leaf" : false,
+			"index" : 5,
+			"text" : "新手指南",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2102,
+			"root" : false,
+			"parentId" : 1001,
+			"leaf" : false,
+			"index" : 1,
+			"text" : "权限体系说明",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2103,
+			"root" : false,
+			"parentId" : 1001,
+			"leaf" : false,
+			"index" : 2,
+			"text" : "API说明",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2104,
+			"root" : false,
+			"parentId" : 1001,
+			"leaf" : false,
+			"index" : 3,
+			"text" : "了解平台技术",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		}]
+	},{
+		"id" : 1002,
+		"root" : false,
+		"parentId" : -1,
+		"leaf" : false,
+		"index" : 1,
+		"text" : "规则中心",
+		"depth" : 1,
+		"expandable" : true,
+		"expanded" : true,
+		"children" : [{
+			"id" : 2201,
+			"root" : false,
+			"parentId" : 1002,
+			"leaf" : false,
+			"index" : 0,
+			"text" : "平台协议",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2202,
+			"root" : false,
+			"parentId" : 1002,
+			"leaf" : false,
+			"index" : 1,
+			"text" : "开放平台基础规范",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2203,
+			"root" : false,
+			"parentId" : 1002,
+			"leaf" : false,
+			"index" : 2,
+			"text" : "订阅取数",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		}]
+	},{
+		"id" : 1003,
+		"root" : false,
+		"parentId" : -1,
+		"leaf" : false,
+		"index" : 2,
+		"text" : "通用业务",
+		"depth" : 1,
+		"expandable" : true,
+		"expanded" : true,
+		"children" : [{
+			"id" : 2301,
+			"root" : false,
+			"parentId" : 1003,
+			"leaf" : false,
+			"index" : 0,
+			"text" : "基础技术",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2302,
+			"root" : false,
+			"parentId" : 1003,
+			"leaf" : false,
+			"index" : 1,
+			"text" : "业务场景开发",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		},{
+			"id" : 2303,
+			"root" : false,
+			"parentId" : 1003,
+			"leaf" : false,
+			"index" : 2,
+			"text" : "常用帮助文档",
+			"depth" : 2,
+			"expandable" : false,
+			"expanded" : false
+		}]
+	}]
+}]

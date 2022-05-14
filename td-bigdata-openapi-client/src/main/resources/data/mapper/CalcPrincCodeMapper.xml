@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teradata.openapi.access.biz.dao.CalcPrincCodeMapper" >
+  <resultMap id="BaseResultMap" type="com.teradata.openapi.access.biz.bean.CalcPrincCode" >
+    <id column="calc_princ_id" property="calcPrincId" jdbcType="INTEGER" />
+    <result column="calc_princ_desc" property="calcPrincDesc" jdbcType="VARCHAR" />
+    <result column="calc_formula" property="calcFormula" jdbcType="VARCHAR" />
+    <result column="subhd_type" property="subhdType" jdbcType="CHAR" />
+    <result column="arg_form" property="argForm" jdbcType="VARCHAR" />
+    <result column="arg_samp" property="argSamp" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    calc_princ_id, calc_princ_desc, calc_formula, subhd_type, arg_form, arg_samp
+  </sql>
+  
+  <select id="queryCalcPrincInfo" resultMap="BaseResultMap">
+  	 select 
+	<include refid="Base_Column_List" />
+	 from opi.calc_princ_code
+  </select>
+ 
+</mapper>

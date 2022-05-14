@@ -1,0 +1,87 @@
+package com.teradata.openapi.httpclient
+
+
+import scala.util.{Failure, Success}
+import scala.concurrent.duration._
+import akka.actor.ActorSystem
+import akka.pattern.ask
+import akka.event.Logging
+import akka.io.IO
+import spray.json.{DefaultJsonProtocol, JsonFormat}
+import spray.can.Http
+import spray.httpx.SprayJsonSupport
+import spray.client.pipelining._
+import spray.util._
+
+/**
+  * Created by John on 2016/11/22.
+  */
+
+case class ApiRetResult(retValue: String)
+
+case class DataLine(DEAL_DATE: String, REGION_CODE: String, CITY_CODE: String, BARGAIN_NUM: String, SHOULD_PAY: String, SHOULD_PAY_AMT: String)
+
+case class CmccApiResult[T](totalCount: Int, page_size: Int, total_pages: Int, dataLine: List[T])
+
+case class ToolsApiResult(retCode: String, retMsg: String, reqID: String, reqStat: String)
+
+object DataJsonProtocol extends DefaultJsonProtocol {
+
+  implicit val datalineFormat = jsonFormat6(DataLine)
+
+  implicit def cmccApiResultFormat[T: JsonFormat] = jsonFormat4(CmccApiResult.apply[T])
+
+}
+
+object GetHttpSyncData extends App {
+  // we need an ActorSystem to host our application in
+  implicit val system = ActorSystem("simple-spray-client")
+
+  import system.dispatcher
+
+  val log = Logging(system, getClass)
+  var url: String = ""
+
+  if (args.length > 0) {
+    url = if (args(0) != null) args(0) else ""
+  }
+  if (("" equals url) || (!url.startsWith("http"))) {
+    log.info("Invalid parameter, Please enter the correct URL.")
+    shutdown()
+    System.exit(1)
+  }
+
+
+
+  // execution context for futures below
+
+
+  log.info("Requesting the CMCC API {}", url)
+
+  import DataJsonProtocol._
+  import SprayJsonSupport._
+
+  val pipeline = sendReceive ~> unmarshal[CmccApiResult[DataLine]]
+
+  val responseFuture = pipeline {
+    Post(url)
+  }
+  responseFuture onComplete {
+    case Success(CmccApiResult(_, _, _, dataLine)) =>
+      log.info("The elevation of Mt. Everest is: {} m", dataLine)
+      shutdown()
+
+    case Success(somethingUnexpected) =>
+      log.warning("The Cmcc API call was successful but returned something unexpected: '{}'.", somethingUnexpected)
+      shutdown()
+
+    case Failure(error) =>
+      log.error(error, "Couldn't get elevation")
+      shutdown()
+  }
+
+  def shutdown(): Unit = {
+    IO(Http).ask(Http.CloseAll)(1.second).await
+    system.shutdown()
+  }
+}

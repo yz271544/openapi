@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.1.xsd
+      http://www.springframework.org/schema/aop  
+      http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+   
+   <context:component-scan base-package="com.teradata.openapi"/>
+
+   <bean id="actorSystem" class="com.teradata.openapi.access.core.ext.ActorSystemFactoryBean">
+        <!-- actor system name -->
+        <property name="name" value="openapiClient"/>
+        <!-- actor system configuration -->
+        <property name="config">
+            <bean class="com.typesafe.config.ConfigFactory" factory-method="load">
+            </bean>
+        </property>
+    </bean>
+	
+	<bean id="deadLetterActor" class="com.teradata.openapi.access.core.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="com.teradata.openapi.access.core.actor.common.DeadLetterActor"/>
+    </bean>
+    
+    <bean id="clientActor" class="com.teradata.openapi.access.core.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="com.teradata.openapi.access.core.actor.impl.ClientApiActor"/>
+    </bean>
+    
+     <bean id="refreshDataActor" class="com.teradata.openapi.access.core.ext.ActorFactoryBean">
+        <!-- actor system reference -->
+        <property name="actorSystem" ref="actorSystem"/>
+        <!-- class name of actor to create -->
+        <property name="actorClass" value="com.teradata.openapi.access.core.actor.impl.RefreshDataActor"/>
+    </bean>
+
+   
+    
+   <bean id="accessCacheFactory" class="com.teradata.openapi.access.core.AccessCacheFactory" />
+</beans>
+

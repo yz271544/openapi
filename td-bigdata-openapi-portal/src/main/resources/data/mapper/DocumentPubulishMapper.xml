@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.teradata.portal.admin.document.dao.DocumentPublishMapper">
+
+	<resultMap id="docTreeResultMap"
+		type="node">
+		<id column="node_id" property="id" jdbcType="INTEGER" />
+		<result column="fathr_node" property="parentId" jdbcType="INTEGER" />
+		<result column="isleaf_node" property="leaf" jdbcType="BOOLEAN" />
+		<result column="node_order" property="index" jdbcType="INTEGER" />
+		<result column="node_desc" property="text" jdbcType="VARCHAR" />
+		<result column="file_content" property="nodeDesc" jdbcType="NVARCHAR" />
+		<result column="depth" property="depth" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<resultMap id="sortTreeResultMap"
+		type="node">
+		<id column="api_sort" property="id" jdbcType="INTEGER" />
+		<result column="api_sort_fathr_id" property="parentId" jdbcType="INTEGER" />
+		<result column="api_sort_name" property="text" jdbcType="VARCHAR" />
+		<result column="api_sort_desc" property="nodeDesc" jdbcType="NVARCHAR" />
+		<result column="api_sort_lvl" property="depth" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<select id="queryDocTree" resultMap="docTreeResultMap">
+		with RECURSIVE cte as
+		(
+				select node_id,fathr_node,
+					case when isleaf_node = 0 then false 
+					else true end isleaf_node,
+					node_order,node_desc,
+					1 as depth,file_content  
+				from opi.file_dir_info
+				where fathr_node = -1
+				union all
+				select 
+					d.node_id,d.fathr_node,
+					case when d.isleaf_node = 0 then false 
+					else true end isleaf_node,
+					d.node_order,d.node_desc,
+					depth+1,d.file_content  
+				from cte c inner join  opi.file_dir_info d
+				on c.node_id = d.fathr_node
+		)
+		select * from cte where isleaf_node is FALSE
+	</select>
+	
+	<select id="querySortTree" resultMap="sortTreeResultMap">
+		with RECURSIVE cte as
+		(
+				select 
+					api_sort,api_sort_name,
+					api_sort_desc,api_sort_lvl,
+					api_sort_fathr_id
+				from opi.api_sort_code
+				where api_sort = 0
+				union all
+				select 
+					d.api_sort,d.api_sort_name,
+					d.api_sort_desc,d.api_sort_lvl,
+					d.api_sort_fathr_id
+				from cte c inner join opi.api_sort_code d
+				on c.api_sort = d.api_sort_fathr_id
+		)
+		select * from cte
+	</select>
+	
+	<insert id="addOpenApiPlatformDir" parameterType="java.util.List">
+		insert into opi.file_dir_info
+			(
+				node_id, fathr_node, isleaf_node, node_order, node_desc, eff_date, file_content
+			)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				nextval('opi.opi_file_seq'),#{item.parentId},0,#{item.index},#{item.text},CURRENT_DATE,#{item.nodeDesc}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updOpenAptPlatformDir" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" separator=";">
+			update opi.file_dir_info 
+				set node_desc = #{item.text},
+					file_content = #{item.nodeDesc}
+			where node_id = #{item.id}
+		</foreach>
+	</update>
+	
+	<delete id="delOpenAptPlatformDir" parameterType="java.util.List">
+		delete from opi.file_dir_info
+		where node_id in 
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<insert id="addSortDir" parameterType="java.util.List">
+		insert into opi.api_sort_code
+			(
+				api_sort, api_sort_fathr_id, api_sort_name, api_sort_lvl, api_sort_desc 
+			)
+		values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				nextval('opi.opi_file_seq'),#{item.parentId},#{item.text},#{item.depth},#{item.nodeDesc}
+			)
+		</foreach>
+	</insert>
+	
+	<update id="updSortDir" parameterType="java.util.List">
+		<foreach collection="list" item="item" index="index" separator=";">
+			update opi.api_sort_code 
+				set api_sort_name = #{item.text},
+					api_sort_desc = #{item.nodeDesc}
+			where api_sort = #{item.id}
+		</foreach>
+	</update>
+	
+	<delete id="delSortDir" parameterType="java.util.List">
+		delete from opi.api_sort_code
+		where api_sort in 
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+	</delete>
+	
+	<insert id="addDoc" parameterType="doc">
+		insert into opi.file_dir_info
+			(
+				node_id, fathr_node, isleaf_node, node_order, node_desc, eff_date, file_title, file_date, file_author, file_content
+			)
+		values
+			(
+				nextval('opi.opi_file_seq'),#{fathrNode},#{isleafNode},nextval('opi.opi_file_order_seq'),#{nodeDesc},CURRENT_DATE,#{fileTitle},CURRENT_DATE,#{fileAuthor},#{fileContent}
+			)
+	</insert>
+	 
+</mapper>

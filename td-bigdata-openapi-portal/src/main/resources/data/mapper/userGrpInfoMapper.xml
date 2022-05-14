@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.auth.dao.UserGrpInfoMapper">
+
+    <resultMap id="userGrpInfoResultMap" type="UserGrpInfo" >
+        <id column="user_grp_id" property="id" jdbcType="INTEGER" />
+        <result column="fathr_user_grp_id" property="parentId" jdbcType="INTEGER" />
+        <result column="user_grp_name" property="name" jdbcType="VARCHAR" />
+        <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+        <result column="user_grp_desc" property="desc" jdbcType="VARCHAR" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
+        <result column="isnt_leaf_node" property="isntLeafNode" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="selectId">
+
+        user_grp_id,
+        fathr_user_grp_id,
+        user_grp_name,
+        (select r.user_grp_name from opi.user_grp_info r where r.user_grp_id = user_grp_info.fathr_user_grp_id ) parentName,
+        user_grp_desc,
+        order_id,
+        isnt_leaf_node
+
+    </sql>
+
+    <select id="queryAll" resultMap="userGrpInfoResultMap" parameterType="UserGrpInfo">
+        select
+        <include refid="selectId"/>
+        from opi.user_grp_info
+        <where>
+            <if test="name != null and name != ''">
+                user_grp_name like '%{name}%'
+            </if>
+        </where>
+        order by user_grp_id
+    </select>
+
+    <select id="queryAllPage" resultMap="userGrpInfoResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_grp_info
+        <where>
+            <if test="name != null and name != ''">
+                user_grp_name like '%{name}%'
+            </if>
+        </where>
+    </select>
+
+    <select id="count" parameterType="UserGrpInfo" resultType="long">
+        select count(*)
+        from opi.user_grp_info where 1=1
+    </select>
+
+    <select id="isExist" resultMap="userGrpInfoResultMap" parameterType="String">
+        select
+        <include refid="selectId"/>
+        from opi.user_grp_info
+        where user_grp_name = #{name}
+    </select>
+
+    <select id="query" resultMap="userGrpInfoResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_grp_info
+        <where>
+            <if test="name != null and name != ''">
+                user_grp_name like '%{name}%'
+            </if>
+        </where>
+    </select>
+
+    <!-- 增加用户组 -->
+    <insert id="add" parameterType="UserGrpInfo">
+        insert into opi.user_grp_info(
+            user_grp_id,
+            fathr_user_grp_id,
+            user_grp_name,
+            user_grp_desc,
+            order_id,
+            isnt_leaf_node
+        )
+        values (
+        #{id},#{parentId},#{name},#{desc},#{orderId},#{isntLeafNode}
+        )
+    </insert>
+
+    <!-- 删除用户组 -->
+    <delete id="delete" parameterType="int">
+        delete from opi.user_grp_info where user_grp_id = #{id}
+    </delete>
+
+    <!-- 通过id查找单个用户组信息 -->
+    <select id="getById" parameterType="int" resultMap="userGrpInfoResultMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_grp_info where user_grp_id = #{id}
+    </select>
+
+    <!-- 根据用户组id 更新用户信息 -->
+    <update id="update" parameterType="UserGrpInfo">
+        update opi.user_grp_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="parentId != -1">
+                fathr_user_grp_id = #{parentId},
+            </if>
+            <if test="name != null and name != ''">
+                user_grp_name = #{name},
+            </if>
+            <if test="desc != null and desc != ''">
+                user_grp_desc = #{desc},
+            </if>
+
+        </trim>
+        where user_grp_id = #{id}
+    </update>
+
+    <!-- 通过userid查找对应的用户组信息  -->
+    <select id="findbyUserGrpRelat" parameterType="int" resultMap="userGrpInfoResultMap">
+
+        select
+        <include refid="selectId" />
+        from opi.user_grp_info
+        where user_grp_id in (select user_grp_id from opi.user_grp_relat where user_id = #{userId})
+
+    </select>
+
+    <select id="findAllSubUserGrpById" parameterType="int" resultMap="userGrpInfoResultMap">
+
+    WITH RECURSIVE T (user_grp_id, fathr_user_grp_id, user_grp_name, user_grp_desc,order_id,isnt_leaf_node)  AS (
+    SELECT user_grp_id, fathr_user_grp_id, user_grp_name, user_grp_desc,order_id,isnt_leaf_node
+    FROM opi.user_grp_info
+    WHERE user_grp_id =  #{userGrpId}
+
+    UNION ALL
+
+    SELECT  d.user_grp_id, d.fathr_user_grp_id, d.user_grp_name, d.user_grp_desc,d.order_id,d.isnt_leaf_node
+    FROM opi.user_grp_info D
+    JOIN T ON D.fathr_user_grp_id = T.user_grp_id
+    )
+    SELECT user_grp_id, fathr_user_grp_id, user_grp_name, user_grp_desc,order_id,isnt_leaf_node FROM T
+    ORDER BY user_grp_id;
+
+    </select>
+
+    <!-- 增加用户和用户组关系信息 -->
+    <insert id="addUserGrpRelat" parameterType="UserGrpRelat">
+
+        insert into opi.user_grp_relat (user_grp_id,user_id) values(#{userGrpId},#{userId})
+
+    </insert>
+
+    <!-- 删除用户和用户组关系信息 -->
+    <delete id="deleteUserGrpRelat" parameterType="int">
+        delete from opi.user_grp_relat where user_id = #{userId}
+    </delete>
+
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teradata.openapi.access.biz.dao.UserInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.teradata.openapi.access.biz.bean.UserInfo" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="login_acct" property="loginAcct" jdbcType="VARCHAR" />
+    <result column="login_pwd" property="loginPwd" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_stat" property="userStat" jdbcType="VARCHAR" />
+    <result column="org_code" property="orgCode" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="gender" property="gender" jdbcType="INTEGER" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="INTEGER" />
+    <result column="region_code" property="regionCode" jdbcType="CHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="site_code" property="siteCode" jdbcType="VARCHAR" />
+    <result column="ip_white_list" property="ipWhiteList" jdbcType="VARCHAR" />
+    <result column="regist_persn" property="registPersn" jdbcType="VARCHAR" />
+    <result column="regist_time" property="registTime" jdbcType="DATE" />
+    <result column="user_grade" property="userGrade" jdbcType="INTEGER" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    
+    <result column="user_grp_id" jdbcType="INTEGER" property="userGrpId" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a.user_id, a.login_acct, a.login_pwd, a.user_name, a.user_stat, a.org_code, a.email, a.phone,a.gender, 
+    a.position, a.user_type, a.region_code, a.city_code, a.site_code, a.ip_white_list, a.regist_persn, 
+    a.regist_time, a.user_grade, a.priority,b.user_grp_id
+  </sql>
+  
+   <select id="queryAllUserInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from opi.user_info a, opi.user_grp_relat b where a.user_id = b.user_id and a.user_stat = '1'
+  </select>
+  
+  <select id="queryApiAndUserRel" resultType="java.util.HashMap">
+    select
+		a.user_id,a.login_acct, c.api_name,c.api_version
+	from
+		opi.user_info a,
+		opi.right_info b,
+		opi.api_info c
+	where
+		a.user_id = b.right_main_val and b.right_field_val =c.api_id
+	and b.right_main = 'user'
+	and b.right_field = 'api'
+  </select>
+  
+  <select id="queryGroupAndApiRel" resultType="java.util.HashMap">
+    select
+		a.user_grp_id, c.api_id,c.api_name,c.api_version
+	from
+		opi.user_grp_info a,
+		opi.right_info b,
+		opi.api_info c
+	where
+		a.user_grp_id = b.right_main_val  and b.right_field_val =c.api_id
+	and b.right_main = 'group'
+	and b.right_field = 'api'
+  </select>
+  
+   <select id="queryGroupAndUserRel" resultType="java.util.HashMap">
+	   	select
+			a.user_id,
+			a.login_acct,
+			b.user_grp_id
+		from
+			opi.user_info a,
+			opi.user_grp_relat b
+		where
+			a.user_id = b.user_id
+		and a.user_stat = '1'
+  </select>
+</mapper>

@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.asterdata:noarch-aster-jdbc-driver:0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../maven_repositories/com/asterdata/noarch-aster-jdbc-driver/0.1/noarch-aster-jdbc-driver-0.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../maven_repositories/com/asterdata/noarch-aster-jdbc-driver/0.1/noarch-aster-jdbc-driver-0.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../maven_repositories/com/asterdata/noarch-aster-jdbc-driver/0.1/noarch-aster-jdbc-driver-0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

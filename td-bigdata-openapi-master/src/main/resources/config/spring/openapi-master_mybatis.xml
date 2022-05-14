@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-3.1.xsd " default-lazy-init="true">
+
+<!-- 开启注解配置 -->
+<context:annotation-config />
+<!-- 引入属性文件 -->
+<context:property-placeholder ignore-resource-not-found="false" location="classpath*:jdbc.properties" />
+<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+<!-- 扫描service层 -->
+<context:component-scan base-package="com.teradata.openapi.master" />
+
+<bean id="dog" class="com.teradata.openapi.master.test.models.Dog">
+    <constructor-arg value="Fido" />
+</bean>
+<bean id="cat" class="com.teradata.openapi.master.test.models.Cat">
+    <constructor-arg value="Felix" />
+</bean>
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+    <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+    <property name="driverClassName" value="${jdbc.driver}" />
+    <!-- 基本属性 url、user、password -->
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+    <!-- 配置初始化大小、最小、最大 -->
+    <property name="initialSize" value="${pool.minIdle}" />
+    <property name="minIdle" value="${pool.minIdle}" />
+    <property name="maxActive" value="${pool.maxActive}" />
+    <!-- 配置获取连接等待超时的时间 -->
+    <property name="maxWait" value="60000" />
+    <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+    <property name="timeBetweenEvictionRunsMillis" value="60000" />
+    <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+    <property name="minEvictableIdleTimeMillis" value="300000" />
+    <property name="validationQuery" value="SELECT 'x'" />
+    <property name="testWhileIdle" value="true" />
+    <property name="testOnBorrow" value="false" />
+    <property name="testOnReturn" value="false" />
+    <!-- 打开PSCache，并且指定每个连接上PSCache的大小（Oracle使用）
+    <property name="poolPreparedStatements" value="true" />
+    <property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->
+    <property name="removeAbandoned" value="${pool.removeAbandoned}" />
+    <property name="removeAbandonedTimeout" value="${pool.removeAbandonedTimeout}" />
+    <!-- 配置监控统计拦截的filters -->
+    <property name="filters" value="stat" />
+</bean>
+
+<!-- 平台缺省 JDBC 数据源 -->
+<bean id="dataSource.sys" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${jdbc.driver}" />
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+    <!--initialSize: 初始连接数-->
+    <property name="initialSize" value="5" />
+    <!--minIdle: 池中自小空闲连接数-->
+    <property name="minIdle" value="5" />
+    <!--maxIdle: 池中最大空闲连接数-->
+    <property name="maxIdle" value="10" />
+    <!--maxActive: 最大活动链接-->
+    <property name="maxActive" value="50" />
+    <!--removeAbandoned: 是否自动回收超时连接-->
+    <property name="removeAbandoned" value="true" />
+    <!--removeAbandonedTimeout: 超时时间(以秒数为单位)-->
+    <property name="removeAbandonedTimeout" value="180" />
+    <!--maxWait: 当没有可用连接时，连接池等待连接释放的最大时间，超过该时间限制会抛出异常，如果设置-1表示无限等待。以毫秒为单位。-->
+    <property name="maxWait" value="120000" />
+    <property name="logAbandoned" value="true" />
+    <!-- 每timeBetweenEvictionRunsMillis毫秒检查一次连接池中空闲的连接，把空闲时间超过minEvictableIdleTimeMillis毫秒的连接断开 -->
+    <!-- minEvictableIdleTimeMillis要小于数据库的最大空闲等待断开时间（如部分mysql版本的缺省空闲8小时则自动断开连接等)  -->
+    <property name="validationQuery" value="${jdbc.vsql}" />
+    <property name="timeBetweenEvictionRunsMillis" value="3600000" /> <!-- 1小时 -->
+    <property name="minEvictableIdleTimeMillis" value="18000000" /> <!-- 5小时 -->
+    <!-- 让空闲链接回收器(如果有)进行有效性检测 -->
+    <property name="testWhileIdle" value="true" />
+    <!-- 从连接池之取出时进行有效性检测 -->
+    <property name="testOnBorrow" value="true" />
+    <!-- 归还连接池之前进行有效性检测 -->
+    <property name="testOnReturn" value="true" />
+</bean>
+
+<!--  事务管理配置 -->
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource.sys"></property>
+</bean>
+
+<tx:annotation-driven transaction-manager="transactionManager"/>
+
+<tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <tx:attributes >
+        <tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="add*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="delete*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="modify*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="do*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="create*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+        <tx:method name="find*" read-only="true" />
+        <tx:method name="get*" read-only="true" />
+        <tx:method name="select*" read-only="true" />
+        <tx:method name="count*" read-only="true" />
+    </tx:attributes>
+</tx:advice>
+<aop:config >
+    <aop:pointcut expression="execution(* com.teradata.openapi.master.finder.service.*.*(..))" id="service"/>
+    <aop:advisor advice-ref="txAdvice" pointcut-ref="service"/>
+</aop:config>
+
+<!-- 与mybatis集成  -->
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <property name="dataSource" ref="dataSource.sys"></property>
+    <property name="configLocation" value="classpath:config.mybatis/mybatis-config.xml"></property>
+    <!-- mybatis配置文件自动扫描路径  -->
+    <property name="mapperLocations" value="classpath:config.mybatis/mapper/*.xml"></property>
+</bean>
+
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+    <property name="basePackage" value="com.teradata.sysframe.**.dao" />
+    <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+</bean>
+
+</beans>

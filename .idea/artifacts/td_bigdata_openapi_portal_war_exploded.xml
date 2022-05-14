@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="td-bigdata-openapi-portal:war exploded">
+    <output-path>$PROJECT_DIR$/td-bigdata-openapi-portal/target/openapi-portal</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>td-bigdata-openapi-portal</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="td-bigdata-openapi-portal" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/td-bigdata-openapi-portal/target/openapi-portal/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="td-bigdata-openapi-portal/web/Web" />
+    </root>
+  </artifact>
+</component>

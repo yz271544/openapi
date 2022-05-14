@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.auth.dao.UserInfoMapper">
+
+    <resultMap id="userInfoResultMap" type="UserInfo" >
+        <id column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="login_acct" property="loginAcct" jdbcType="VARCHAR" />
+        <result column="login_pwd" property="loginPwd" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="user_stat" property="userStat" jdbcType="VARCHAR" />
+        <result column="org_code" property="orgCode" jdbcType="INTEGER" />
+        <result column="email" property="email" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="gender" property="gender" jdbcType="INTEGER" />
+        <result column="position" property="position" jdbcType="VARCHAR" />
+        <result column="user_type" property="userType" jdbcType="INTEGER" />
+        <result column="region_code" property="regionCode" jdbcType="VARCHAR" />
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+        <result column="site_code" property="siteCode" jdbcType="VARCHAR" />
+        <result column="regist_persn" property="registPersn" jdbcType="VARCHAR" />
+        <result column="regist_time" property="registTime" jdbcType="DATE" />
+        <result column="user_grade" property="userGrade" jdbcType="INTEGER" />
+        <result column="priority" property="priority" jdbcType="INTEGER" />
+        <result column="userGrpName" property="userGrpName" jdbcType="VARCHAR" />
+        <result column="audit_persn" property="auditPersn" jdbcType="VARCHAR" />
+        <result column="audit_time" property="auditTime" jdbcType="TIMESTAMP" />
+        <result column="audit_advc" property="auditAdvc" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <resultMap id="regUserInfoResultMap" type="RegUserInfo" >
+        <id column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="login_acct" property="loginAcct" jdbcType="VARCHAR" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="regist_persn" property="registPersn" jdbcType="VARCHAR" />
+        <result column="regist_time" property="registTime" jdbcType="DATE" />
+        <result column="user_type_code" property="userTypeCode" jdbcType="INTEGER" />
+        <result column="user_type_desc" property="userTypeDesc" jdbcType="VARCHAR" />
+        <result column="user_stat_code" property="userStatCode" jdbcType="VARCHAR" />
+        <result column="user_stat_desc" property="userStatDesc" jdbcType="VARCHAR" />
+        <result column="audit_advc" property="auditAdvc" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+    <sql id="selectId">
+
+        user_id,
+        login_acct,
+        login_pwd,
+        user_name,
+        user_stat,
+        org_code,
+        email,
+        phone,
+        gender,
+        position,
+        user_type,
+        region_code,
+        city_code,
+        site_code,
+        regist_persn,
+        regist_time,
+        user_grade,
+        priority,
+        (select user_grp_name from opi.user_grp_info where user_grp_info.user_grp_id in (select user_grp_id from opi.user_grp_relat where user_id = user_info.user_id)) userGrpName
+    </sql>
+
+    <resultMap id="ApiCodeResultMap" type="java.util.HashMap" >
+        <id column="code_type" property="codeType" jdbcType="VARCHAR" />
+        <id column="code_id" property="codeId" jdbcType="INTEGER" />
+        <result column="code_desc" property="codeDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="ApiCode_Column_List" >
+        code_type, code_id, code_desc
+    </sql>
+
+    <select id="queryAll" resultMap="userInfoResultMap" parameterType="UserInfo">
+        select
+        <include refid="selectId"/>
+        from opi.user_info where 1=1
+
+            <if test="loginAcct != null and loginAcct != ''">
+                and login_acct like '%{loginAcct}%'
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like '%{userName}%'
+            </if>
+
+    </select>
+
+    <select id="queryAllPage" resultMap="userInfoResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_info where 1=1
+
+            <if test="t.loginAcct != null and t.loginAcct != ''">
+                and login_acct like '%${t.loginAcct}%'
+            </if>
+            <if test="t.userName != null and t.userName != ''">
+                and user_name like '%${t.userName}%'
+            </if>
+
+    </select>
+
+    <select id="count" parameterType="UserInfo" resultType="long">
+        select count(*)
+        from opi.user_info where 1=1
+
+            <if test="loginAcct != null and loginAcct != ''">
+                and login_acct like '%{loginAcct}%'
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like '%{userName}%'
+            </if>
+
+    </select>
+
+    <select id="isExist" resultMap="userInfoResultMap" parameterType="String">
+        select
+        <include refid="selectId"/>
+        from opi.user_info
+        where login_acct = #{loginAcct}
+    </select>
+
+    <select id="query" resultMap="userInfoResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_info where 1=1
+
+            <if test="loginAcct != null and loginAcct != ''">
+                and login_acct like '%{loginAcct}%'
+            </if>
+            <if test="userName != null and userName != ''">
+                and user_name like '%{userName}%'
+            </if>
+
+    </select>
+
+    <!-- 增加用户 -->
+    <insert id="add" parameterType="UserInfo">
+        insert into opi.user_info(
+             user_id,login_acct,login_pwd,user_name,user_stat,
+            <!--org_code,-->
+             email,phone,gender,position,user_type,
+        <!--region_code,city_code,site_code,-->
+        regist_persn,regist_time,user_grade,priority
+       )
+       values (#{userId},#{loginAcct},#{loginPwd},#{userName},#{userStat},
+        <!--#{orgCode},-->
+        #{email},#{phone},#{gender},#{position},#{userType},
+        <!--#{regionCode},#{cityCode},#{siteCode},-->
+        #{registPersn},#{registTime},#{userGrade},#{priority}
+        )
+     </insert>
+
+ <!-- 删除用户 -->
+    <delete id="delete" parameterType="int">
+        delete from opi.user_info where user_id = #{userId}
+    </delete>
+
+
+    <delete id="deleteUserByLoginAcct" parameterType="String">
+        delete from opi.user_info where login_acct = #{loginAcct}
+    </delete>
+
+
+    <!-- 通过id查找单个用户信息 -->
+    <select id="getById" parameterType="int" resultMap="userInfoResultMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_info where user_id = #{userId}
+    </select>
+
+    <!-- 根据用户id 更新用户信息 -->
+    <update id="update" parameterType="UserInfo">
+        update opi.user_info
+        <trim prefix="set" suffixOverrides=",">
+            <if test="loginPwd != null and loginPwd != ''">
+                login_pwd = #{loginPwd},
+            </if>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userStat != null and userStat != ''">
+                user_stat = #{userStat},
+            </if>
+            <if test="orgCode != -1 ">
+                org_code = #{orgCode},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="gender != -1 ">
+                gender = #{gender},
+            </if>
+            <if test="position != null and position != ''">
+                position = #{position},
+            </if>
+            <if test="userType != -1 ">
+                user_type = #{userType},
+            </if>
+            <if test="regionCode != null and regionCode != ''">
+                region_code = #{regionCode},
+            </if>
+            <if test="cityCode != null and cityCode != ''">
+                city_code = #{cityCode},
+            </if>
+            <if test="siteCode != null and siteCode != ''">
+                site_code = #{siteCode},
+            </if>
+            <if test="registPersn != null and registPersn != ''">
+                regist_persn = #{registPersn},
+            </if>
+            <if test="registTime != null and registTime != ''">
+                regist_time = #{registTime},
+            </if>
+            <if test="userGrade != -1 ">
+                user_grade = #{userGrade},
+            </if>
+            <if test="priority != -1 ">
+                priority = #{priority},
+            </if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+    <!--  验证用户登录 -->
+    <select id="countUserInfo" parameterType="UserInfo" resultMap="userInfoResultMap">
+        select
+        <include refid="selectId"/>
+        from opi.user_info
+        where login_acct = #{loginAcct} and login_pwd = #{loginPwd}
+    </select>
+
+    <!-- 根据用户账号查出Id -->
+    <select id="querySingleUserInfo" parameterType="String" resultType="int">
+        select user_id
+        from opi.user_info
+        where login_acct = #{loginAcct}
+    </select>
+
+    <!-- 根据用户组Id查找全部对应用户信息 -->
+    <select id="queryAllUserInfoByUserGrpIdPage" parameterType="java.util.HashMap" resultMap="userInfoResultMap" >
+        select
+        <include refid="selectId"/>
+        from opi.user_info
+        where user_id in (
+        select user_id from opi.user_grp_relat
+        where user_grp_id in
+        <foreach item="item" index="index" collection="userGrpIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <select id="countQueryAllUserInfoByUserGrpId" parameterType="java.util.HashMap" resultType="long">
+        select count(*)
+        from opi.user_info
+        where user_id in (
+        select user_id from opi.user_grp_relat
+        where user_grp_id in
+        <foreach item="item" index="index" collection="userGrpIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        )
+    </select>
+
+    <!-- 根据用户组Id查找全部对应用户信息 -->
+    <select id="getAuditUsers" parameterType="String" resultMap="userInfoResultMap" >
+        select
+        <include refid="selectId"/>
+        from opi.user_info
+        where user_stat = #{userStat}
+    </select>
+
+
+    <!-- 获取注册状态审批代码信息 -->
+    <select id="queryRegExamStat" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'reg_exam_stat_code'
+        order by code_id
+    </select>
+
+
+    <!-- 获取Reg列表信息 -->
+    <select id="queryRegInfo" resultMap="regUserInfoResultMap">
+        select user_id,
+                login_acct,
+                user_name,
+                phone,
+                regist_persn,
+                regist_time,
+                user_type_code,
+                user_type_desc,
+                user_stat_code,
+                user_stat_desc,
+                audit_advc
+        from opi.user_info_vw
+        <where>
+            <if test="loginAcct != null and loginAcct != ''">
+                login_acct LIKE CONCAT('%',#{loginAcct},'%')
+            </if>
+            <if test="userStatCode != null and userStatCode != -1">
+               and user_stat_code = #{userStatCode}::text
+            </if>
+            <if test="beginDate != null">
+                and regist_time &gt;= #{beginDate}
+            </if>
+            <if test="endDate != null">
+                and regist_time &lt;= #{endDate}
+            </if>
+        </where>
+        order by regist_time DESC
+        offset #{offset} limit #{limit}
+    </select>
+
+
+    <!-- 页面审核注册用户 -->
+    <update id="updateUserStatInfo" parameterType="com.teradata.portal.admin.auth.entity.UserInfo">
+        update opi.user_info
+        <set>
+            <if test="userStat != ''">
+                user_stat = #{userStat},
+            </if>
+            <if test="auditPersn != ''">
+                audit_persn = #{auditPersn},
+            </if>
+                audit_time = CURRENT_TIMESTAMP(6),
+            <if test="auditAdvc != ''">
+                audit_advc = #{auditAdvc},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

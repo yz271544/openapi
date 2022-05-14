@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teradata.portal.web.sandbox.dao.SandBoxMapper" >
+  <resultMap id="apiInfoResultMap" type="com.teradata.portal.web.sandbox.pojo.ApiInfo" >
+    <id column="api_id" jdbcType="INTEGER" property="apiId" />
+    <id column="api_version" jdbcType="INTEGER" property="apiVersion" />
+    <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+    <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+    <result column="api_sort" jdbcType="INTEGER" property="apiSort" />
+    <result column="data_strct_type_code" jdbcType="INTEGER" property="dataStrctTypeCode" />
+    <result column="relse_type" jdbcType="CHAR" property="relseType" />
+    <result column="api_name" jdbcType="VARCHAR" property="apiName" />
+    <result column="api_desc" jdbcType="VARCHAR" property="apiDesc" />
+    <result column="data_cycle_type" jdbcType="INTEGER" property="dataCycleType" />
+    <result column="relse_persn" jdbcType="VARCHAR" property="relsePersn" />
+    <result column="relse_time" jdbcType="TIMESTAMP" property="relseTime" />
+    <result column="tab_scale_type" jdbcType="INTEGER" property="tabScaleType" />
+    <result column="exam_stat" jdbcType="INTEGER" property="examStat" />
+    <result column="api_class_name" property="apiClassName" jdbcType="VARCHAR" />
+    <result column="trigger_methd" property="triggerMethod" jdbcType="INTEGER" />
+    <result column="api_visit_methd" property="apiVisitMethd" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="apiInfoVWResultMap" type="com.teradata.portal.web.sandbox.pojo.ApiInfoModel" >
+    <result column="api_id" property="apiId" jdbcType="INTEGER" />
+    <result column="api_version" property="apiVersion" jdbcType="INTEGER" />
+    <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+    <result column="api_cls_desc" property="apiClsDesc" jdbcType="VARCHAR" />
+    <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+    <result column="api_stat_desc" property="apiStatDesc" jdbcType="VARCHAR" />
+    <result column="api_sort" property="apiSort" jdbcType="INTEGER" />
+    <result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+    <result column="data_strct_type_code" property="dataStrctTypeCode" jdbcType="INTEGER" />
+    <result column="data_strct_type_desc" property="dataStrctTypeDesc" jdbcType="VARCHAR" />
+    <result column="relse_type" property="relseType" jdbcType="INTEGER" />
+    <result column="relse_desc" property="relseDesc" jdbcType="VARCHAR" />
+    <result column="api_name" property="apiName" jdbcType="VARCHAR" />
+    <result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+    <result column="data_cycle_type" property="dataCycleType" jdbcType="INTEGER" />
+    <result column="data_cycle_desc" property="dataCycleDesc" jdbcType="VARCHAR" />
+    <result column="relse_persn" property="relsePersn" jdbcType="VARCHAR" />
+    <result column="relse_time" property="relseTime" jdbcType="DATE" />
+    <result column="tab_scale_type" property="tabScaleType" jdbcType="INTEGER" />
+    <result column="tab_scale_desc" property="tabScaleDesc" jdbcType="VARCHAR" />
+    <result column="exam_stat" property="examStat" jdbcType="INTEGER" />
+    <result column="exam_stat_desc" property="examStatDesc" jdbcType="VARCHAR" />
+    <result column="api_class_name" property="apiClassName" jdbcType="VARCHAR" />
+    <result column="trigger_methd" property="triggerMethd" jdbcType="INTEGER" />
+    <result column="trigger_methd_desc" property="triggerMethdDesc" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="apiInfo_Column_List" >
+     api_id, api_version, api_cls_code,api_stat_code, api_sort, data_strct_type_code, relse_type, api_name, 
+     api_desc, data_cycle_type, relse_persn, relse_time, tab_scale_type,exam_stat,api_class_name,trigger_methd,api_visit_methd
+  </sql>
+  
+   <sql id="apiInfoVW_Column_List" >
+	    api_id, api_version, api_cls_code, api_cls_desc, api_stat_code, api_stat_desc, api_sort, 
+	    api_sort_name, data_strct_type_code, data_strct_type_desc, relse_type, relse_desc, 
+	    api_name, api_desc, data_cycle_type, data_cycle_desc, relse_persn, relse_time, tab_scale_type, 
+	    tab_scale_desc, exam_stat, exam_stat_desc, api_class_name, trigger_methd, trigger_methd_desc
+  </sql>
+  
+  <resultMap id="apiSortResultMap" type="com.teradata.portal.web.sandbox.pojo.ApiSortCode" >
+    <id column="api_sort" property="apiSort" jdbcType="INTEGER" />
+    <result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+    <result column="api_sort_desc" property="apiSortDesc" jdbcType="VARCHAR" />
+    <result column="api_sort_lvl" property="apiSortLvl" jdbcType="INTEGER" />
+    <result column="api_sort_fathr_id" property="apiSortFathrId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="apiSort_Column_List" >
+    api_sort, api_sort_name, api_sort_desc, api_sort_lvl, api_sort_fathr_id
+  </sql>
+  
+  <resultMap id="sturctArgResultMap" type="com.teradata.portal.web.sandbox.pojo.StructApiArg" >
+    <id column="api_id" property="apiId" jdbcType="INTEGER" />
+    <id column="api_version" property="apiVersion" jdbcType="INTEGER" />
+    <id column="field_alias" property="fieldAlias" jdbcType="VARCHAR" />
+    <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+    <result column="field_eff_stat" property="fieldEffStat" jdbcType="INTEGER" />
+    <result column="field_sorc_type" property="fieldSorcType" jdbcType="VARCHAR" />
+    <result column="field_targt_type" property="fieldTargtType" jdbcType="VARCHAR" />
+    <result column="field_title" property="fieldTitle" jdbcType="VARCHAR" />
+    <result column="sync_must_type" property="syncMustType" jdbcType="INTEGER" />
+    <result column="sync_must_one_grp_id" property="syncMustOneGrpId" jdbcType="INTEGER" />
+    <result column="asyn_must_type" property="asynMustType" jdbcType="INTEGER" />
+    <result column="asyn_must_one_grp_id" property="asynMustOneGrpId" jdbcType="INTEGER" />
+    <result column="rss_must_type" property="rssMustType" jdbcType="INTEGER" />
+    <result column="rss_must_one_grp_id" property="rssMustOneGrpId" jdbcType="INTEGER" />
+    <result column="req_arg_id" property="reqArgId" jdbcType="CHAR" />
+    <result column="req_arg_deflt_val" property="reqArgDefltVal" jdbcType="VARCHAR" />
+    <result column="respn_arg_id" property="respnArgId" jdbcType="CHAR" />
+    <result column="respn_arg_samp_val" property="respnArgSampVal" jdbcType="VARCHAR" />
+    <result column="field_file_desc" property="fieldFileDesc" jdbcType="VARCHAR" />
+    <result column="calc_princ_id" property="calcPrincId" jdbcType="INTEGER" />
+    <result column="value_range" property="valueRange" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="structArg_Column_List" >
+    api_id, api_version, field_alias, field_name, field_eff_stat, field_sorc_type, field_targt_type,
+    field_title, sync_must_type, sync_must_one_grp_id, asyn_must_type,asyn_must_one_grp_id,rss_must_type,rss_must_one_grp_id,
+    req_arg_id, req_arg_deflt_val, respn_arg_id, respn_arg_samp_val, field_file_desc, calc_princ_id, value_range
+  </sql>
+  
+  <resultMap id="apiTestBoxMap" type="com.teradata.portal.web.sandbox.pojo.ApiTestBox" >
+    <id column="box_id" jdbcType="INTEGER" property="boxId" />
+    <result column="api_id" jdbcType="INTEGER" property="apiId" />
+    <result column="api_name" jdbcType="VARCHAR" property="apiName" />
+    <result column="app_key" jdbcType="VARCHAR" property="appKey" />
+    <result column="req_type" jdbcType="VARCHAR" property="reqType" />
+    <result column="submit_type" jdbcType="VARCHAR" property="submitType" />
+    <result column="return_type" jdbcType="VARCHAR" property="returnType" />
+    <result column="req_args" jdbcType="VARCHAR" property="reqArgs" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="login_name" jdbcType="VARCHAR" property="loginName" />
+    <result column="test_result" jdbcType="VARCHAR" property="testResult" />
+    <result column="is_success" jdbcType="CHAR" property="isSuccess" />
+    <result column="api_version" jdbcType="INTEGER" property="apiVersion" />
+  </resultMap>
+  
+  <select id="queryAllApiSort" resultMap="apiSortResultMap" >
+    select 
+    <include refid="apiSort_Column_List" />
+    from opi.api_sort_code
+    where api_sort_fathr_id = 0
+  </select>
+  
+  <select id="queryApiBySort" resultMap="apiInfoResultMap" >
+    select distinct api_id,api_name from opi.api_info
+    where api_sort = #{apiSort} and api_stat_code=1 and exam_stat =2
+    <if test="reqMethod != null">
+    	and api_visit_methd like '%${reqMethod}%'
+    </if>
+  </select>
+
+  <select id="queryApiBySortPagination" resultMap="apiInfoResultMap" >
+    select api_id,api_name from
+    (select api_id,api_name,row_number()over(order by api_id,api_name) as num
+    from opi.api_info
+    where api_sort = #{apiSort} and api_stat_code=1 and exam_stat =2
+    <if test="reqMethod != null">
+    and api_visit_methd like '%${reqMethod}%'
+    </if>
+    <if test="expName != null">
+    and api_name like '%${expName}%'
+    </if>
+    ) t where num between #{start} and #{end}
+  </select>
+
+
+  <select id="loadExpApiNameCount" resultType="java.lang.Long" >
+    select count(*) from
+    (select api_id,api_name,row_number()over(order by api_id,api_name) as num
+    from opi.api_info
+    where api_sort = #{apiSort} and api_stat_code=1 and exam_stat =2
+    <if test="reqMethod != null">
+      and api_visit_methd like '%${reqMethod}%'
+    </if>
+    <if test="expName != null">
+      and api_name like '%${expName}%'
+    </if>
+    ) t
+  </select>
+
+  <select id="queryApiInfoByKey" resultMap="apiInfoResultMap" >
+    select api_visit_methd from opi.api_info
+    where api_id=#{apiId} and api_version=#{apiVersion} and api_stat_code=1
+  </select>
+  
+  
+  <select id="queryApiInfoVWById" resultMap="apiInfoVWResultMap">
+     select
+     <include refid="apiInfoVW_Column_List" />
+     from opi.api_info_vw
+     where api_id = #{apiId} and api_stat_code=1 and exam_stat =2
+  </select>
+  
+  <select id="queryStructArgByKey" resultMap="sturctArgResultMap" >
+    select 
+    <include refid="structArg_Column_List" />
+    from opi.struct_api_arg
+    where api_id=#{apiId} and api_version=#{apiVersion}
+    order by api_version desc
+  </select>
+  
+  <insert id="addTestBox" parameterType="com.teradata.portal.web.sandbox.pojo.ApiTestBox" >
+    insert into opi.api_test_box (box_id, api_id, api_name, 
+      app_key, req_type, submit_type, 
+      return_type, req_args, start_time, 
+      login_name, test_result, is_success, 
+      api_version)
+    values (nextval('opi.api_test_box_id_seq'), #{apiId}, #{apiName}, 
+      #{appKey}, #{reqType}, #{submitType}, 
+      #{returnType}, #{reqArgs}, current_timestamp, 
+      #{loginName}, #{testResult}, #{isSuccess}, 
+      #{apiVersion})
+  </insert>
+ 
+</mapper>

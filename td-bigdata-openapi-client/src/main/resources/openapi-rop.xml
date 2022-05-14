@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rop="http://www.rop.com/schema/rop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+       http://www.rop.com/schema/rop http://www.rop.com/schema/rop/rop-1.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+       
+    <!--① 扫描Spring Bean-->
+    <context:component-scan base-package="com.teradata.openapi.access.biz.service"/>
+
+	 <!--Spring的工具类，用来获得配置文件中的bean -->
+    <bean id="springUtil" class="com.teradata.openapi.framework.util.SpringContextUtil" />
+
+    <!-- 启动Rop框架 -->
+    <rop:annotation-driven
+        id="router"
+        app-secret-manager="appSecretManager"
+        service-access-controller="serviceAccessController"
+        service-timeout-seconds="360"
+        core-pool-size="200"
+        max-pool-size="500"
+        queue-capacity="50"
+        keep-alive-seconds="300"
+        sign-enable="true"/>
+
+
+    <bean id="appSecretManager" class="com.teradata.openapi.access.core.ApiAppSecretManager"/>
+
+    <bean id="serviceAccessController" class="com.teradata.openapi.access.core.ApiServiceAccessController"/>
+
+
+    <!--自定义method,appKey等这些系统级参数的参数名-->
+    <rop:sysparams
+            version-param-name="version"
+            jsonp-param-name="__invoke"/>
+
+</beans>

@@ -1,0 +1,164 @@
+.oa_menu_item {
+	height : 100%;
+	line-height : 100%;
+	padding : 21px 18px 15px 18px;
+	color : #ffffff;
+	cursor : pointer;
+	font-size : 16px;
+	font-weight : 400;
+	font-family : "Microsoft Yahei";
+}
+
+.common_click_cursor {
+	cursor : pointer;
+}
+
+.oa_menu_item_select {
+	background-color : #4e5966;
+}
+
+.main_view {
+	background-color : #eff3f8 !important;
+	color : #a2abb7;
+}
+
+.popmenuitem_font {
+	color : #ced5de;
+	font-family: "Microsoft Yahei";
+    font-size: 14px;
+    font-weight: 300;
+    white-space: normal;
+}
+.popmenuitem_mouseover {
+	background-color : #5d6b7a;
+	cursor : pointer;
+}
+
+.panel_base {
+	background-color : #ffffff;
+	padding : 12px 20px 15px 20px;
+}
+
+.panel_title_font {
+	font-family: "Microsoft Yahei";
+	font-weight : 700;
+	font-size : 16px;
+	color : #E26A6A;
+}
+
+.button_base {
+	color: #FFF;
+	font-size : 14px;
+	font-weight : 400;
+	font-family : "Microsoft Yahei";
+    background-color: #32c5d2;
+    border-color: #32c5d2;
+    padding: 6px 12px;
+    cursor : pointer;
+}
+
+.x-button_base_hover {
+    background-color: #26a1ab;
+    border-color: #2499a3;
+}
+
+.common_font {
+	font-family: "Microsoft Yahei";
+	font-weight : 400;
+	font-size : 14px;
+	color : #333;
+	white-space:nowrap;
+	height : 100%;
+}
+
+.field_style {
+	vertical-align : middle;
+}
+
+.textfield {
+	padding: 6px 12px;
+    background-color: #fff;
+    border: 1px solid #c2cad8;
+    font-size: 14px;
+    line-height: 1.42857;
+    color: #555;
+}
+
+.htmleditor_image {
+	background : #ffffff url(../images/image.png) no-repeat top right;
+}
+
+.htmleditor_preview {
+	background : #ffffff url(../images/eye1.png) no-repeat top right;
+}
+
+.apilisttem_font {
+	color : #333;
+	font-family: "Microsoft Yahei";
+    font-size: 14px;
+    font-weight: 300;
+    white-space: normal;
+}
+
+.apilisttem_selected {
+	background-color : #f9fafb;
+}
+
+.apilisttem_mouseover {
+	cursor : pointer;
+}
+
+.x-search-trigger-component {
+	border-width : 1px;
+	border-color : silver #d9d9d9 #d9d9d9;
+	border-style : solid;
+}
+
+.x-search-trigger {
+  	background : url(../images/tool-icon.png) no-repeat 3px 3px;
+  	width : 19px;
+  	height : 19px;
+  	cursor : pointer;
+}
+
+.x-trigger-focus {
+	border : 1px solid red;
+}
+
+.search_result_title {
+	font-family: "Microsoft Yahei";
+	font-weight : 400;
+	font-size : 16px;
+	font-style : bolder;
+	color : #333;
+}
+
+.search_result_content *{
+	font-family: "Microsoft Yahei" !important;
+	font-weight : 400 !important;
+	font-size : 16px !important;
+	font-style : bolder !important;
+	color : #333 !important;
+	padding : 0px;
+}
+
+.search_mover {
+	background-color : #eef1f5;
+}
+
+.sys_menu_font {
+	font-family: "Microsoft Yahei";
+	font-weight : 300;
+	font-size : 13px;
+	color : #aaafb7;
+	white-space:nowrap;
+	height : 100%;
+}
+
+.footer_label {
+	font-family: "Microsoft Yahei";
+	color: #32c5d2;
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 1px;
+}

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>td-bigdata-openapi</artifactId>
+        <groupId>com.teradata</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../td-bigdata-openapi/pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>td-bigdata-openapi-httpclient</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.10.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>2.10.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.10</artifactId>
+            <version>2.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gilt</groupId>
+            <artifactId>jerkson_2.10</artifactId>
+            <version>0.6.8</version>
+        </dependency>
+    </dependencies>
+    <build>
+
+        <finalName>openapi-httpclient</finalName>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <!--<resources>
+            &lt;!&ndash; 控制资源文件的拷贝&ndash;&gt;
+            <resource>
+                <directory>src/main/resources</directory>
+                <targetPath>${project.build.directory}/conf</targetPath>
+            </resource>
+        </resources>-->
+        <plugins>
+            <!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.10</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit4</artifactId>
+                        <version>2.10</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+             &lt;!&ndash;The configuration of maven-jar-plugin&ndash;&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                &lt;!&ndash; The configuration of the plugin &ndash;&gt;
+                <configuration>
+                    &lt;!&ndash; Configuration of the archiver &ndash;&gt;
+                    <outputDirectory>${project.build.directory}/applib/</outputDirectory>
+                    <archive>
+
+                        &lt;!&ndash; 生成的jar中，不要包含pom.xml和pom.properties这两个文件 &ndash;&gt;
+                        <addMavenDescriptor>false</addMavenDescriptor>
+
+                        &lt;!&ndash; Manifest specific configuration &ndash;&gt;
+                        <manifest>
+                            &lt;!&ndash; 是否要把第三方jar放到manifest的classpath中 &ndash;&gt;
+                            <addClasspath>true</addClasspath>
+                            &lt;!&ndash; 生成的manifest中classpath的前缀，因为要把第三方jar放到lib目录下，所以classpath的前缀是lib/ &ndash;&gt;
+                            <classpathPrefix>../lib</classpathPrefix>
+                            &lt;!&ndash; 应用的main class &ndash;&gt;
+                            <mainClass>com.teradata.openapi.httpclient.GetToolsInfo</mainClass>
+                        </manifest>
+                        &lt;!&ndash;<manifestEntries>
+                            <Class-Path>../conf/</Class-Path>
+                        </manifestEntries>&ndash;&gt;
+
+                        &lt;!&ndash;<manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>&ndash;&gt;
+                    </archive>
+                </configuration>
+            </plugin>
+
+            &lt;!&ndash; 拷贝依赖的jar包到lib目录 &ndash;&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>
+                                ${project.build.directory}/lib
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            &lt;!&ndash; 解决资源文件的编码问题 &ndash;&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>-->
+
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <!--<descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>-->
+                    <archive>
+                        <manifest>
+                            <mainClass>com.teradata.openapi.httpclient.GetToolsInfo</mainClass>
+                        </manifest>
+                    </archive>
+
+                    <!-- 指定maven-assembly-plugin的配置文件 -->
+                    <appendAssemblyId>true</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/main/assemble/assembly.xml</descriptor>
+                    </descriptors>
+                    <!--<excludes>
+                        <exclude>**/*.zip</exclude>
+                    </excludes>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <!-- 绑定到package生命周期阶段上 -->
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${basedir}/conf</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

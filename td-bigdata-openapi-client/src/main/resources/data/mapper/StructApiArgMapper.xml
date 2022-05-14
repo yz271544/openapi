@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.openapi.access.biz.dao.StructApiArgMapper">
+  <resultMap id="BaseResultMap" type="com.teradata.openapi.access.biz.bean.StructApiArg">
+    <id column="api_id" jdbcType="INTEGER" property="apiId" />
+    <id column="api_version" jdbcType="INTEGER" property="apiVersion" />
+    <id column="field_alias" jdbcType="VARCHAR" property="fieldAlias" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="field_eff_stat" jdbcType="INTEGER" property="fieldEffStat" />
+    <result column="field_sorc_type" jdbcType="VARCHAR" property="fieldSorcType" />
+    <result column="field_targt_type" jdbcType="VARCHAR" property="fieldTargtType" />
+    <result column="field_title" jdbcType="VARCHAR" property="fieldTitle" />
+    <result column="sync_must_type" property="syncMustType" jdbcType="INTEGER" />
+    <result column="sync_must_one_grp_id" property="syncMustOneGrpId" jdbcType="INTEGER" />
+    <result column="asyn_must_type" property="asynMustType" jdbcType="INTEGER" />
+    <result column="asyn_must_one_grp_id" property="asynMustOneGrpId" jdbcType="INTEGER" />
+    <result column="rss_must_type" property="rssMustType" jdbcType="INTEGER" />
+    <result column="rss_must_one_grp_id" property="rssMustOneGrpId" jdbcType="INTEGER" />
+    <result column="req_arg_id" jdbcType="CHAR" property="reqArgId" />
+    <result column="req_arg_deflt_val" jdbcType="VARCHAR" property="reqArgDefltVal" />
+    <result column="respn_arg_id" jdbcType="CHAR" property="respnArgId" />
+    <result column="respn_arg_samp_val" jdbcType="VARCHAR" property="respnArgSampVal" />
+    <result column="field_file_desc" jdbcType="VARCHAR" property="fieldFileDesc" />
+    <result column="calc_princ_id" jdbcType="INTEGER" property="calcPrincId" />
+    <result column="value_range" jdbcType="VARCHAR" property="valueRange" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    api_id, api_version, field_alias, field_name, field_eff_stat, field_sorc_type, field_targt_type,
+    field_title, sync_must_type, sync_must_one_grp_id, asyn_must_type,asyn_must_one_grp_id,rss_must_type,rss_must_one_grp_id,
+    req_arg_id, req_arg_deflt_val, respn_arg_id, respn_arg_samp_val, field_file_desc, calc_princ_id, value_range
+  </sql>
+  
+</mapper>

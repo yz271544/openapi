@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teradata.portal.web.home.dao.HomeMapper">
+	<resultMap id="ApiItemMonitorDetlVwResultMap"
+		type="com.teradata.portal.web.home.pojo.apiItemMonitorDetlVw">
+		<result column="deal_date" property="dealDate" jdbcType="DATE" />
+		<result column="api_sort" property="apiSort" jdbcType="CHAR" />
+		<result column="api_sort_name" property="apiSortName" jdbcType="VARCHAR" />
+		<result column="api_id" property="apiId" jdbcType="INTEGER" />
+		<result column="api_version" property="apiVersion" jdbcType="INTEGER" />
+		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
+		<result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+		<result column="api_visit_methd" property="apiVisitMethd"
+			jdbcType="INTEGER" />
+		<result column="api_visit_methd_desc" property="apiVisitMethdDesc" jdbcType="VARCHAR" />
+		<result column="visit_times" property="visitTimes" jdbcType="NUMERIC" />
+		<result column="avg_respn_dur" property="avgRespnDur" jdbcType="NUMERIC" />
+		<result column="api_stat" property="apiStat" jdbcType="INTEGER" />
+		<result column="api_stat_desc" property="apiStatDesc" jdbcType="VARCHAR" />
+		<result column="earliest_use_time" property="earliestUseTime"
+			jdbcType="TIMESTAMP" />
+		<result column="most_rec_use_time" property="mostRecUseTime"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="ApiItemMonitorDetlVw_Column_List">
+		deal_date, api_sort, api_sort_name, api_id, api_version, api_name,
+		api_desc, api_visit_methd, api_visit_methd_desc,
+		visit_times,
+		avg_respn_dur, api_stat, api_stat_desc,
+		earliest_use_time, most_rec_use_time
+	</sql>
+
+	<!-- 获取api状态运行情况 -->
+	<select id="queryApiStatus" resultMap="ApiItemMonitorDetlVwResultMap">
+		select
+		<include refid="ApiItemMonitorDetlVw_Column_List" />
+		from opi.api_item_monitor_detl_vw
+		where api_stat = #{apiStat}
+		<if test="apiSort != -1">
+		and api_sort = #{apiSort} 
+		</if>
+		<if test="apiVisitMethd != -1">
+		and api_visit_methd = #{apiVisitMethd}
+		</if>
+		<if test="apiName != ''">
+		and api_name LIKE CONCAT('%',#{apiName},'%')
+		</if>
+		<if test="viewType == 'developView'">
+			and (api_id, api_version) in  
+			<if test="ifGroup == 0">
+			(select api_id, api_version from opi.api_info where relse_persn = #{userId} ::text)
+			</if>
+			<if test="ifGroup == 1">
+			(select api_id, api_version 
+			 from opi.api_info 
+			 where relse_persn in (select (user_id ::text)
+			 					   from opi.user_grp_relat 
+			 					   where user_grp_id =#{userGrpId})) 
+			</if>
+		</if>
+	</select>
+
+
+	<resultMap id="ApiTotalResultMap"
+		type="java.util.HashMap">
+		<result column="totalNum" property="totalNum" jdbcType="INTEGER" />
+		<result column="activeNum" property="activeNum" jdbcType="INTEGER" />
+		<result column="unactiveNum" property="unactiveNum" jdbcType="INTEGER" />
+		<result column="errorNum" property="errorNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 获取api数量（运维视图|APP视图 ：总数、活跃数、非活跃数、状态异常数；开发视图：累计开发API总数量、被访问APIN个、被访问N次、平均响应时长N秒） -->
+	<select id="queryApiTotal" resultMap="ApiTotalResultMap">
+		select 
+		<if test="viewType == 'appView'">
+			sum(case when item_id = '1001' then item_val else 0 end) as totalNum,
+			sum(case when item_id = '1002' then item_val else 0 end) as activeNum,
+			sum(case when item_id = '1003' then item_val else 0 end) as unactiveNum,
+			sum(case when item_id = '1004' then item_val else 0 end) as errorNum
+		</if>
+		<if test="viewType == 'monitorView'">
+			sum(case when item_id = '3001' then item_val else 0 end) as totalNum,
+			sum(case when item_id = '3002' then item_val else 0 end) as activeNum,
+			sum(case when item_id = '3003' then item_val else 0 end) as unactiveNum,
+			sum(case when item_id = '3004' then item_val else 0 end) as errorNum
+		</if>
+		from opi.api_tot_item_monitor_vw
+		where appkey = #{loginAcct}
+	</select>
+	
+	<resultMap id="ApiChartResultMap"
+		type="java.util.HashMap">
+		<result column="deal_date" property="dealDate" jdbcType="VARCHAR" />
+		<result column="valSync" property="valSync" jdbcType="NUMERIC" />
+		<result column="valAsync" property="valAsync" jdbcType="NUMERIC" />
+		<result column="valBook" property="valBook" jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<!-- 运维视图|APP视图-获取api趋势分析(API数量、访问次数、平均响应时长) -->
+	<select id="queryApiChart" resultMap="ApiChartResultMap">
+		select  
+		deal_date,
+		sum(case when api_visit_methd = '0' then item_val else 0 end) as valSync,
+		sum(case when api_visit_methd = '1' then item_val else 0 end) as valAsync,
+		sum(case when api_visit_methd = '2' then item_val else 0 end) as valBook
+		from opi.api_item_monitor_vw
+		where item_id = #{itemId}
+		group by deal_date
+		order by deal_date asc
+	</select>
+	
+	<!-- 开发者视图-获取api趋势分析(API数量、访问次数、平均响应时长) -->
+	<select id="queryOwnApiChart" resultMap="ApiChartResultMap">
+		select  
+		deal_date,
+		sum(case when api_visit_methd = '0' then item_val else 0 end) as valSync,
+		sum(case when api_visit_methd = '1' then item_val else 0 end) as valAsync,
+		sum(case when api_visit_methd = '2' then item_val else 0 end) as valBook
+		from opi.api_dvlp_item_monitor_vw
+		where item_id = #{itemId}
+		<if test="ifGroup == 0">
+		and user_acct = #{loginAcct}
+		</if>
+		<if test="ifGroup == 1">
+		and user_grp_id = #{userGrpId}
+		</if>
+		group by deal_date
+		order by deal_date asc
+	</select>
+	
+	<resultMap id="ExamCountResultMap"
+		type="java.util.HashMap">
+		<result column="registerNum" property="registerNum" jdbcType="INTEGER" />
+		<result column="authNum" property="authNum" jdbcType="INTEGER" />
+		<result column="approveNum" property="approveNum" jdbcType="INTEGER" />
+	</resultMap>
+	
+	<!-- 获取待审批数量（注册工号、权限、api发布） -->
+	<select id="queryExamCount" resultMap="ExamCountResultMap">
+		select
+		sum(case when countType = 'register' then countVal else 0 end) as registerNum,
+		sum(case when countType = 'auth' then countVal else 0 end) as authNum,
+		sum(case when countType = 'approve' then countVal else 0 end) as approveNum
+		from
+		(select 'register' as countType, count(*) as register_num from opi.user_info
+		where user_stat='0'
+		UNION ALL
+		select 'auth' as countType, count(*) as auth_num from opi.right_apply_info
+		where audit_stat=0
+		UNION ALL
+		select 'approve' as countType, count(*) as approve_num from opi.api_info
+		where exam_stat=1
+		)t(countType, countVal)
+	</select>
+	
+	<resultMap id="StateCountResultMap"
+		type="java.util.HashMap">
+		<result column="apiTotal" property="apiTotal" jdbcType="INTEGER" />
+		<result column="visitedNum" property="visitedNum" jdbcType="INTEGER" />
+		<result column="visitedTime" property="visitedTime" jdbcType="INTEGER" />
+		<result column="avgTime" property="avgTime" jdbcType="NUMERIC" />
+	</resultMap>
+	
+	<!-- 开发者视图-展示文字描述信息（累计开发api总数量、被访问api数量、被访问次数、平均访问时长） -->
+	<select id="queryStateCount" resultMap="StateCountResultMap">
+		select 
+		sum(val1) as apiTotal,
+		sum(val2) as visitedNum,
+		sum(val3) as visitedTime,
+		avg(val4) as avgTime
+		from
+		(select 
+			appKey,
+			sum(case when item_id = '2001' then item_val else 0 end) as val1,
+			sum(case when item_id = '2002' then item_val else 0 end) as val2,
+			sum(case when item_id = '2003' then item_val else 0 end) as val3,
+			sum(case when item_id = '2004' then item_val else 0 end) as val4
+		from opi.api_tot_item_monitor_vw		
+		WHERE 
+		<if test="ifGroup == 0">
+		appkey = #{loginAcct}
+		</if>
+		<if test="ifGroup != 0">
+		appkey in (
+						select	login_acct
+						from opi.user_info t1
+						inner join opi.user_grp_relat t2
+						on	t1.user_id = t2.user_id
+						and	t2.user_grp_id = #{userGrpId}
+				  )
+		</if>
+		GROUP BY 1
+		)t(appKey,val1, val2, val3, val4)
+	</select>
+</mapper>

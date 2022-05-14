@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//ibatis.apache.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="lazyLoadingEnabled" value="false" />
+		<setting name="aggressiveLazyLoading" value="false" />
+	</settings>
+	<typeAliases>
+		<!-- 给实体Bean一个别名 -->
+		<typeAlias type="com.teradata.portal.admin.auth.entity.UserInfo" alias="UserInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.RegUserInfo" alias="RegUserInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.UserGrpInfo" alias="UserGrpInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.UserGrpRelat" alias="UserGrpRelat" />
+		<!--<typeAlias type="com.teradata.portal.admin.auth.entity.SysMenuInfo" alias="SysMenuInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.PageElemtInfo" alias="PageElemtInfo" />-->
+		<typeAlias type="com.teradata.portal.admin.auth.entity.OrgInfo" alias="OrgInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.AuthInfo" alias="AuthInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.ResourceInfo" alias="ResourceInfo" />
+
+		<typeAlias type="com.teradata.portal.admin.auth.entity.ApiInfo" alias="ApiInfo" />
+		<typeAlias type="com.teradata.portal.admin.auth.entity.ApiSortCode" alias="ApiSortCode" />
+		<!--<typeAlias type="com.teradata.openapi.framework.model.SourceInfoRow" alias="SourceInfo" />-->
+
+		<typeAlias type="com.teradata.portal.admin.right.entity.RightApplyInfo" alias="RightApplyInfo" />
+		<typeAlias type="com.teradata.portal.admin.right.entity.RightApplyDetl" alias="RightApplyDetl" />
+		<typeAlias type="com.teradata.portal.admin.right.entity.Apply2RightDetl" alias="Apply2RightDetl" />
+
+		<typeAlias alias="doc" type="com.teradata.portal.web.document.pojo.Document" />
+		<typeAlias alias="sort" type="com.teradata.portal.web.document.pojo.ApiSort" />
+		<typeAlias alias="param" type="com.teradata.portal.web.document.pojo.Params" />
+		<typeAlias alias="node" type="com.teradata.portal.web.document.pojo.Node" />
+		<typeAlias alias="api" type="com.teradata.portal.web.apiDisplay.pojo.Api" />
+		<typeAlias alias="structArgs" type="com.teradata.portal.web.apiDisplay.pojo.StructApiArg" />
+		<typeAlias alias="addr" type="com.teradata.portal.web.apiDisplay.pojo.ApiReqAddr" />
+		<typeAlias alias="publicArgs" type="com.teradata.portal.web.apiDisplay.pojo.PublicArgInfo" />
+	</typeAliases>
+	<plugins>
+		<plugin interceptor="com.github.miemiedev.mybatis.paginator.OffsetLimitInterceptor">
+			<property name="dialectClass" value="com.github.miemiedev.mybatis.paginator.dialect.PostgreSQLDialect" />
+		</plugin>
+	</plugins>
+</configuration>

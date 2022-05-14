@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ScalaCompilerConfiguration">
+    <profile name="Maven 1" modules="td-bigdata-openapi-cacher,td-bigdata-openapi-client,td-bigdata-openapi-format,td-bigdata-openapi-framework,td-bigdata-openapi-httpclient,td-bigdata-openapi-master,td-bigdata-openapi-portal,td-bigdata-openapi-worker" />
+  </component>
+</project>

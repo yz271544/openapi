@@ -1,0 +1,1 @@
+http://192.168.20.110:9080/restserver/router?appKey=qichao1&method=tb_rpt_bo_mon&version=1&format=json&locale=zh_CN&codeType=UTF-8&reqType=syn&fields=SHOULD_PAY_AMT,REGION_CODE,BARGAIN_NUM,SHOULD_PAY,CITY_CODE,DEAL_DATE&DEAL_DATE=201604&sign=5E4EA5737D4196DDDFBDB164B5FA60E2E1D348B5

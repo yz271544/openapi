@@ -1,0 +1,5 @@
+package collectTest
+
+object ArrayTest {
+
+}

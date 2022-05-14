@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Built-By: John
+Class-Path: ../conf/ ../lib/scala-library-2.10.4.jar ../lib/scala-refl
+ ect-2.10.4.jar ../lib/scalatest_2.10-2.2.6.jar ../lib/akka-actor_2.10
+ -2.3.14.jar ../lib/config-1.2.1.jar ../lib/akka-slf4j_2.10-2.3.14.jar
+  ../lib/slf4j-api-1.7.21.jar ../lib/akka-remote_2.10-2.3.14.jar ../li
+ b/netty-3.8.0.Final.jar ../lib/protobuf-java-2.5.0.jar ../lib/uncommo
+ ns-maths-1.2.2a.jar ../lib/akka-cluster_2.10-2.3.14.jar ../lib/akka-t
+ estkit_2.10-2.3.14.jar ../lib/akka-zeromq_2.10-2.3.14.jar ../lib/zero
+ mq-scala-binding_2.10-0.0.7.jar ../lib/jna-3.0.9.jar ../lib/jnr-const
+ ants-0.8.2.jar ../lib/akka-camel_2.10-2.3.14.jar ../lib/camel-core-2.
+ 10.3.jar ../lib/spray-client_2.10-1.3.3.jar ../lib/spray-can_2.10-1.3
+ .3.jar ../lib/spray-io_2.10-1.3.3.jar ../lib/spray-http_2.10-1.3.3.ja
+ r ../lib/parboiled-scala_2.10-1.1.7.jar ../lib/parboiled-core-1.1.7.j
+ ar ../lib/spray-httpx_2.10-1.3.3.jar ../lib/mimepull-1.9.5.jar ../lib
+ /spray-util_2.10-1.3.3.jar ../lib/spray-json_2.10-1.3.2.jar
+Created-By: Apache Maven 3.2.5
+Build-Jdk: 1.8.0_74
+Main-Class: com.teradata.openapi.httpclient.GetToolsInfo
+

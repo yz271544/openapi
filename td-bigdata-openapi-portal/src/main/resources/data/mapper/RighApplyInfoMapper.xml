@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.right.dao.RightApplyInfoMapper">
+
+    <resultMap id="rightApplyResultMap" type="RightApplyInfo" >
+        <id column="apply_id" property="applyId" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
+        <result column="login_acct" property="loginAcct" jdbcType="VARCHAR" />
+        <result column="apply_time" property="applyTime" jdbcType="BIGINT" />
+        <result column="apply_timestamp" property="applyTimestamp" jdbcType="VARCHAR" />
+        <result column="audit_persn" property="auditPersn" jdbcType="VARCHAR" />
+        <result column="audit_time" property="auditTime" jdbcType="BIGINT" />
+        <result column="audit_timestamp" property="auditTimestamp" jdbcType="BIGINT" />
+        <result column="audit_stat" property="auditStat" jdbcType="INTEGER" />
+        <result column="audit_stat_desc" property="auditStatDesc" jdbcType="VARCHAR" />
+        <result column="audit_advc" property="auditAdvc" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="selectId">
+        apply_id,
+        user_id,
+        login_acct,
+        apply_time,
+        apply_timestamp,
+        audit_persn,
+        audit_time,
+        audit_timestamp,
+        audit_stat,
+        audit_stat_desc,
+        audit_advc
+    </sql>
+    <resultMap id="ApiCodeResultMap" type="java.util.HashMap" >
+        <id column="code_type" property="codeType" jdbcType="VARCHAR" />
+        <id column="code_id" property="codeId" jdbcType="INTEGER" />
+        <result column="code_desc" property="codeDesc" jdbcType="VARCHAR" />
+    </resultMap>
+    <sql id="ApiCode_Column_List" >
+        code_type, code_id, code_desc
+    </sql>
+
+    <select id="isExist" resultMap="rightApplyResultMap" parameterType="Integer">
+        select
+        <include refid="selectId"/>
+        from opi.right_apply_info_vw
+        where apply_Id = #{applyId}
+    </select>
+
+    <insert id="add" parameterType="RightApplyInfo">
+        insert into opi.right_apply_info(
+        apply_id,user_id,login_acct,apply_time,audit_stat
+   )
+   values (#{applyId},#{userId},#{loginAcct},#{applyTime},-1
+    )
+ </insert>
+
+    <!-- 获取权限审批状态代码信息 -->
+    <select id="queryAuthAuditStat" resultMap="ApiCodeResultMap">
+        select
+        <include refid="ApiCode_Column_List" />
+        from opi.api_code
+        where code_type = 'auth_audit_stat_code'
+        order by code_id
+    </select>
+
+    <delete id="deleteByApplyId" parameterType="Integer">
+        DELETE FROM opi.right_apply_info
+        WHERE apply_id = #{applyId}
+    </delete>
+
+    <!-- 获取RightApprInfo列表信息 -->
+    <select id="queryRightApprInfo" resultMap="rightApplyResultMap">
+        select
+        <include refid="selectId"/>
+        from opi.right_apply_info_vw
+        <where>
+            audit_stat >= 0
+            <if test="loginAcct != null and loginAcct != ''">
+                and login_acct LIKE CONCAT('%',#{loginAcct},'%')
+            </if>
+            <if test="auditStat != null and auditStat != -1">
+                and audit_stat = #{auditStat}
+            </if>
+            <if test="beginDateTimeMills != null">
+                and apply_time &gt;= #{beginDateTimeMills}
+            </if>
+            <if test="endDateTimeMills != null">
+                and apply_time &lt;= #{endDateTimeMills}
+            </if>
+        </where>
+        order by apply_time DESC
+        offset #{offset} limit #{limit}
+    </select>
+
+
+
+    <!-- 获取RightApplyInfo列表信息 -->
+    <select id="queryRightApplyInfo" resultMap="rightApplyResultMap">
+        select
+        <include refid="selectId"/>
+        from opi.right_apply_info_vw
+        <where>
+            <if test="loginAcct != null and loginAcct != ''">
+               login_acct = #{loginAcct}
+            </if>
+            <if test="auditStat != null and auditStat != -1">
+                and audit_stat = #{auditStat}
+            </if>
+            <if test="beginDateTimeMills != null">
+                and apply_time &gt;= #{beginDateTimeMills}
+            </if>
+            <if test="endDateTimeMills != null">
+                and apply_time &lt;= #{endDateTimeMills}
+            </if>
+        </where>
+        order by apply_time DESC
+        offset #{offset} limit #{limit}
+    </select>
+
+    <!-- 页面审核注册用户 -->
+    <update id="updateAuditStat" parameterType="RightApplyInfo">
+        update opi.right_apply_info
+        <set>
+            <if test="auditStat != null">
+                audit_stat = #{auditStat},
+            </if>
+            <if test="auditPersn != null and auditPersn != ''">
+                audit_persn = #{auditPersn},
+            </if>
+            <if test="auditTime != null and auditTime != ''">
+                audit_time = extract(epoch from now()),
+            </if>
+            <if test="auditAdvc != null and auditAdvc != ''">
+                audit_advc = #{auditAdvc}
+            </if>
+        </set>
+        where apply_id = #{applyId}
+    </update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

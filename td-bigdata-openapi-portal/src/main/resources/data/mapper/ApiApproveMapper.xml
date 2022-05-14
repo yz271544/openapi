@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.teradata.portal.web.apiApprove.dao.ApiApproveMapper" >
+	<resultMap id="ApiTestBoxResultMap" type="com.teradata.portal.web.sandbox.pojo.ApiTestBox">
+		<id column="box_id" property="boxId" jdbcType="INTEGER" />
+		<result column="api_id" property="apiId" jdbcType="INTEGER" />
+		<result column="api_name" property="apiName" jdbcType="VARCHAR" />
+		<result column="app_key" property="appKey" jdbcType="VARCHAR" />
+		<result column="req_type" property="reqType" jdbcType="VARCHAR" />
+		<result column="submit_type" property="submitType" jdbcType="VARCHAR" />
+		<result column="return_type" property="returnType" jdbcType="VARCHAR" />
+		<result column="req_args" property="reqArgs" jdbcType="VARCHAR" />
+		<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="login_name" property="loginName" jdbcType="VARCHAR" />
+		<result column="test_result" property="testResult" jdbcType="VARCHAR" />
+		<result column="is_success" property="isSuccess" jdbcType="CHAR" />
+		<result column="api_version" property="apiVersion" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="ApiTestBox_Column_List">
+		box_id, api_id, api_name, app_key, req_type, submit_type,
+		return_type,
+		req_args,
+		start_time, login_name, test_result, is_success,
+		api_version
+	</sql>
+	
+	<!-- 查看待审批api的测试沙箱信息 -->
+	<select id="queryApiTestBox" resultMap="ApiTestBoxResultMap">
+	select <include refid="ApiTestBox_Column_List" />
+	from opi.api_test_box
+	where api_id = #{apiId}
+	and api_version = #{apiVersion}
+	and is_success = '0'
+	order by start_time desc
+	limit 3
+  	</select>
+  	
+  	
+	<update id="updateApiExamInfo" parameterType="com.teradata.portal.web.apiApprove.pojo.ApiExamInfo">
+	update opi.api_exam_info
+	set isnt_eff = 0
+	</update>
+	<insert id="insertApiExamInfo" parameterType="com.teradata.portal.web.apiApprove.pojo.ApiExamInfo">
+    insert into opi.api_exam_info (audit_id, api_id, api_version, 
+      test_sndbox_ids, audit_advc, audit_stat, 
+      audit_time, audit_persn, isnt_eff
+      )
+    values (#{auditId,jdbcType=INTEGER}, #{apiId,jdbcType=INTEGER}, #{apiVersion,jdbcType=INTEGER}, 
+      #{testSndboxIds,jdbcType=VARCHAR}, #{auditAdvc,jdbcType=VARCHAR}, #{auditStat,jdbcType=INTEGER}, 
+      CURRENT_TIMESTAMP(6), #{auditPersn,jdbcType=VARCHAR}, 1
+      )
+  </insert>
+</mapper>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/openAPI.iml" filepath="$PROJECT_DIR$/.idea/openAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi/td-bigdata-openapi.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi/td-bigdata-openapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-cacher/td-bigdata-openapi-cacher.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-cacher/td-bigdata-openapi-cacher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-checker/td-bigdata-openapi-checker.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-checker/td-bigdata-openapi-checker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-client/td-bigdata-openapi-client.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-client/td-bigdata-openapi-client.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-format/td-bigdata-openapi-format.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-format/td-bigdata-openapi-format.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-framework/td-bigdata-openapi-framework.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-framework/td-bigdata-openapi-framework.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-httpclient/td-bigdata-openapi-httpclient.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-httpclient/td-bigdata-openapi-httpclient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-master/td-bigdata-openapi-master.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-master/td-bigdata-openapi-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-portal/td-bigdata-openapi-portal.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-portal/td-bigdata-openapi-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/td-bigdata-openapi-worker/td-bigdata-openapi-worker.iml" filepath="$PROJECT_DIR$/td-bigdata-openapi-worker/td-bigdata-openapi-worker.iml" />
+    </modules>
+  </component>
+</project>

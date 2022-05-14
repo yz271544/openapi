@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.auth.dao.ApiInfoMapper">
+
+
+    <resultMap id="apiInfoResultMap" type="ApiInfo">
+        <id column="api_id" property="id" jdbcType="INTEGER" />
+        <result column="api_version" property="apiVersion" jdbcType="INTEGER" />
+        <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+        <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+        <result column="api_sort" property="parentId" jdbcType="INTEGER" />
+        <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+        <result column="data_strct_type_code" property="dataStrctTypeCode" jdbcType="INTEGER" />
+        <result column="relse_type" property="relseType" jdbcType="INTEGER" />
+        <result column="api_name" property="name" jdbcType="VARCHAR" />
+        <result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+        <result column="data_cycle_type" property="dataCycleType" jdbcType="INTEGER" />
+        <result column="relse_persn" property="relsePersn" jdbcType="VARCHAR" />
+        <result column="relse_time" property="relseTime" jdbcType="TIMESTAMP" />
+        <result column="tab_scale_type" property="tabScaleType" jdbcType="INTEGER" />
+        <result column="exam_stat" property="examStat" jdbcType="INTEGER" />
+        <result column="api_class_name" property="apiClassName" jdbcType="VARCHAR" />
+        <result column="trigger_methd" property="triggerMethd" jdbcType="INTEGER" />
+    </resultMap>
+
+    <resultMap id="apiInfoWithRightResultMap" type="ApiInfo">
+        <id column="api_id" property="id" jdbcType="INTEGER" />
+        <result column="api_version" property="apiVersion" jdbcType="INTEGER" />
+        <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+        <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+        <result column="api_sort" property="parentId" jdbcType="INTEGER" />
+        <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+        <result column="data_strct_type_code" property="dataStrctTypeCode" jdbcType="INTEGER" />
+        <result column="relse_type" property="relseType" jdbcType="INTEGER" />
+        <result column="api_name" property="name" jdbcType="VARCHAR" />
+        <result column="api_desc" property="apiDesc" jdbcType="VARCHAR" />
+        <result column="data_cycle_type" property="dataCycleType" jdbcType="INTEGER" />
+        <result column="relse_persn" property="relsePersn" jdbcType="VARCHAR" />
+        <result column="relse_time" property="relseTime" jdbcType="TIMESTAMP" />
+        <result column="tab_scale_type" property="tabScaleType" jdbcType="INTEGER" />
+        <result column="exam_stat" property="examStat" jdbcType="INTEGER" />
+        <result column="api_class_name" property="apiClassName" jdbcType="VARCHAR" />
+        <result column="trigger_methd" property="triggerMethd" jdbcType="INTEGER" />
+        <result column="right_field_val" property="rightFieldValue" jdbcType="INTEGER" />
+        <result column="right_main" property="rightMain" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <!-- 查询API信息 -->
+    <sql id="selectApi">
+        api_id,
+        api_version,
+        api_cls_code,
+        api_stat_code,
+        api_sort,
+        (select api_sort_name from opi.api_sort_code t where t.api_sort = api_info.api_sort ) parentName,
+        data_strct_type_code,
+        relse_type,
+        api_name,
+        api_desc,
+        data_cycle_type,
+        relse_persn,
+        relse_time,
+        tab_scale_type,
+        exam_stat,
+        api_class_name,
+        trigger_methd
+    </sql>
+
+    <sql id="selectApiWithRight">
+        api_id,
+        api_version,
+        api_cls_code,
+        api_stat_code,
+        api_sort,
+        (select api_sort_name from opi.api_sort_code t where t.api_sort = api_info.api_sort ) parentName,
+        data_strct_type_code,
+        relse_type,
+        api_name,
+        api_desc,
+        data_cycle_type,
+        relse_persn,
+        relse_time,
+        tab_scale_type,
+        exam_stat,
+        api_class_name,
+        trigger_methd,
+        right_field_val,
+        right_main
+    </sql>
+
+
+    <sql id="selectApiWithApplyRight">
+        api_id,
+        api_version,
+        api_cls_code,
+        api_stat_code,
+        api_sort,
+        (select api_sort_name from opi.api_sort_code t where t.api_sort = api_info.api_sort ) parentName,
+        data_strct_type_code,
+        relse_type,
+        api_name,
+        api_desc,
+        data_cycle_type,
+        relse_persn,
+        relse_time,
+        tab_scale_type,
+        exam_stat,
+        api_class_name,
+        trigger_methd,
+        coalesce(t4.right_field_val,t3.right_field_val,t2.right_field_val) as right_field_val,
+        coalesce(t4.right_main,t3.right_main,t2.right_main) as right_main
+    </sql>
+    <!-- 根据组id查找对应的权限API信息，如果有则显示勾选状态 -->
+    <select id="findApiInfoAuthByGrpId" parameterType="int" resultMap="apiInfoWithRightResultMap">
+        select
+        <include refid="selectApiWithRight" />
+        from opi.api_info api_info
+        left join (select right_field_val,right_main from opi.right_info where right_main_val = #{rightFieldValue} and right_main = 'group' and right_field = 'api') t2
+        on api_info.api_id = t2.right_field_val
+        UNION
+        select
+        api_sort api_sort,
+        -1 api_version,
+        -1 api_cls_code,
+        -1 api_stat_code,
+        api_sort_fathr_id api_sort,
+        'API分类' parentName,
+        -1 data_strct_type_code,
+        -1 relse_type,
+        api_sort_name api_name,
+        api_sort_name api_desc,
+        -1 data_cycle_type,
+        '' relse_persn,
+        current_date relse_time,
+        -1 tab_scale_type,
+        -1 exam_stat,
+        '' api_class_name,
+        -1 trigger_methd,
+        -1 right_field_val,
+        null right_main
+        from opi.api_sort_code
+        order by api_id
+    </select>
+
+    <!-- 根据用户id查找对应的权限API信息，如果有则显示勾选状态 -->
+    <select id="findApiInfoAuthByUserId" parameterType="int" resultMap="apiInfoWithRightResultMap">
+        select
+        <include refid="selectApiWithRight" />
+        from opi.api_info api_info
+        left join (select right_field_val,right_main from opi.right_info where right_main_val = #{rightFieldValue} and right_main = 'user' and right_field = 'api') t2
+        on api_info.api_id = t2.right_field_val
+        UNION
+        select
+        api_sort api_sort,
+        -1 api_version,
+        -1 api_cls_code,
+        -1 api_stat_code,
+        api_sort_fathr_id api_sort,
+        'API分类' parentName,
+        -1 data_strct_type_code,
+        -1 relse_type,
+        api_sort_name api_name,
+        api_sort_name api_desc,
+        -1 data_cycle_type,
+        '' relse_persn,
+        current_date relse_time,
+        -1 tab_scale_type,
+        -1 exam_stat,
+        '' api_class_name,
+        -1 trigger_methd,
+        -1 right_field_val,
+        null right_main
+        from opi.api_sort_code
+        order by api_id
+    </select>
+
+
+    <!-- 根据用户id查找对应的权限API信息，如果有则显示勾选状态 -->
+    <select id="findApiInfoAuthByApplyId" resultMap="apiInfoWithRightResultMap">
+        select
+        <include refid="selectApiWithApplyRight" />
+        from opi.api_info api_info
+        left join (select right_field_val,'apply'::varchar as right_main from opi.right_apply_detl
+                    where 1=1
+                    <if test="userId != null and userId != ''">
+                    and right_main_val = #{userId}
+                    </if>
+                    <if test="applyId != null and applyId !=''">
+                    and apply_id = #{applyId}
+                    </if>
+                    and right_main = 'user' and right_field = 'api'
+                    GROUP BY right_field_val) t2
+        on api_info.api_id = t2.right_field_val
+        left join (select right_field_val,right_main from opi.right_info
+                    where 1=1
+                    <if test="userId != null and userId != ''">
+                    and right_main_val = #{userId}
+                    </if>
+                    and right_main = 'user' and right_field = 'api') t3
+        on api_info.api_id = t3.right_field_val
+        left join (select right_field_val,right_main from opi.right_info
+                    where 1=1
+                    <if test="grpId != null and grpId != ''">
+                    and right_main_val = #{grpId}
+                    </if>
+                    and right_main = 'group' and right_field = 'api') t4
+        on api_info.api_id = t4.right_field_val
+        UNION
+        select
+        api_sort api_sort,
+        -1 api_version,
+        -1 api_cls_code,
+        -1 api_stat_code,
+        api_sort_fathr_id api_sort,
+        'API分类' parentName,
+        -1 data_strct_type_code,
+        -1 relse_type,
+        api_sort_name api_name,
+        api_sort_name api_desc,
+        -1 data_cycle_type,
+        '' relse_persn,
+        current_date relse_time,
+        -1 tab_scale_type,
+        -1 exam_stat,
+        '' api_class_name,
+        -1 trigger_methd,
+        -1 right_field_val,
+        null right_main
+        from opi.api_sort_code
+        order by api_id
+    </select>
+
+    <select id="findApiAuthByIdMaps" parameterType="java.util.HashMap" resultMap="apiInfoResultMap">
+        select
+        <include refid="selectApi" />
+        from opi.api_info api_info
+        where api_info.api_id in (select right_field_val from opi.right_info where right_main_val in
+        <foreach item="item" index="index" collection="rightMainVals" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and right_field = 'api' )
+        order by api_id
+    </select>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

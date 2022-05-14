@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<context id="DatabaseTables" targetRuntime="MyBatis3">
+		<!--  
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Criteria" />
+		</plugin>
+		-->
+		<commentGenerator>
+			<property name="suppressAllComments" value="false" />
+		</commentGenerator>
+		
+		<!-- teradata datalink -->
+		<jdbcConnection driverClass="org.postgresql.Driver"
+			connectionURL="jdbc:postgresql://192.168.20.1:5432/open_api" userId="open_api" password="123456">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		
+		<javaModelGenerator targetPackage="com.teradata.portal.web.sandbox.pojo"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="false" />
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="data.mapper" targetProject="src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+  
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="com.teradata.portal.web.sandbox.dao" targetProject="src/main/java">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+		
+		<!-- <table tableName="api_sort_code" domainObjectName="ApiSortCode" schema="opi">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+		
+	    <table tableName="api_info" domainObjectName="ApiInfo" schema="opi">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+	   
+	    <table tableName="struct_api_arg" domainObjectName="StructApiArg" schema="opi">
+	      <property name="useActualColumnNames" value="false" />
+	    </table> -->
+	    
+	    <table tableName="api_test_box" domainObjectName="ApiTestBox" schema="opi">
+	      <property name="useActualColumnNames" value="false" />
+	    </table> 
+	    <!-- 
+	   <table tableName="user_info" domainObjectName="UserInfo" schema="opi">
+	      <property name="useActualColumnNames" value="false" />
+	    </table>
+	     
+	   <table tableName="user_grp_info" domainObjectName="UserGrpInfo" schema="opi">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	    
+	    <table tableName="calc_princ_code" domainObjectName="CalcPrincCode">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   <table tableName="calc_princ_code" domainObjectName="CalcPrincCode">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   
+	   <table tableName="tb_system_app_info" domainObjectName="TbSystemAppInfo">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   
+	   <table tableName="tb_system_service_log" domainObjectName="TbSystemServiceLog">
+	      <property name="useActualColumnNames" value="false" />
+	   </table>
+	   -->
+	    
+	</context>
+</generatorConfiguration>

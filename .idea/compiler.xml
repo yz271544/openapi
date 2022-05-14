@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="td-bigdata-openapi-cacher" />
+        <module name="td-bigdata-openapi-client" />
+        <module name="td-bigdata-openapi-format" />
+        <module name="td-bigdata-openapi-worker" />
+        <module name="td-bigdata-openapi-checker" />
+        <module name="td-bigdata-openapi-framework" />
+        <module name="td-bigdata-openapi-httpclient" />
+        <module name="td-bigdata-openapi-master" />
+        <module name="td-bigdata-openapi-portal" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="td-bigdata-openapi" target="1.8" />
+      <module name="td-bigdata-openapi-cacher" target="1.8" />
+      <module name="td-bigdata-openapi-checker" target="1.8" />
+      <module name="td-bigdata-openapi-client" target="1.8" />
+      <module name="td-bigdata-openapi-format" target="1.8" />
+      <module name="td-bigdata-openapi-framework" target="1.8" />
+      <module name="td-bigdata-openapi-httpclient" target="1.8" />
+      <module name="td-bigdata-openapi-master" target="1.8" />
+      <module name="td-bigdata-openapi-portal" target="1.8" />
+      <module name="td-bigdata-openapi-worker" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

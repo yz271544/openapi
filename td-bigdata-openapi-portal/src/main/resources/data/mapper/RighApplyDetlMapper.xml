@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.portal.admin.right.dao.RightApplyDetlMapper">
+
+    <resultMap id="rightApplyDetlResultMap" type="RightApplyDetl" >
+        <id column="apply_id" property="applyId" jdbcType="INTEGER" />
+        <result column="right_main" property="rightMain" jdbcType="VARCHAR" />
+        <result column="right_main_val" property="rightMainVal" jdbcType="INTEGER" />
+        <result column="right_field" property="rightField" jdbcType="VARCHAR" />
+        <result column="right_field_val" property="rightFieldVal" jdbcType="INTEGER" />
+        <result column="eff_stat" property="eff_stat" jdbcType="INTEGER" />
+    </resultMap>
+
+    <sql id="selectRightApplyDetl">
+        apply_id,
+        right_main,
+        right_main_val,
+        right_field,
+        right_field_val,
+        eff_stat
+    </sql>
+
+    <insert id="add" parameterType="RightApplyDetl">
+        insert into opi.right_apply_detl(
+            apply_id,right_main,right_main_val,right_field,right_field_val
+       )
+       values (#{applyId},#{rightMain},#{rightMainVal},#{rightField},#{rightFieldVal}
+        )
+     </insert>
+
+    <insert id="updateApplyDetlInfo" parameterType="Apply2RightDetl">
+        insert into opi.right_info(
+        right_id,right_main,right_main_val,right_field,right_field_val,apply_doc_id
+        )
+        values (#{rightId},#{rightMain},#{rightMainVal},#{rightField},#{rightFieldVal},#{applyId}
+        )
+    </insert>
+
+    <delete id="deleteByApplyId" parameterType="Integer">
+        DELETE FROM opi.right_apply_detl
+        WHERE apply_id = #{applyId}
+    </delete>
+
+    <!-- 获取Reg列表信息 -->
+    <select id="queryRightApplyDetl" parameterType="Integer" resultMap="rightApplyDetlResultMap">
+        select
+        <include refid="selectRightApplyDetl"/>
+        from opi.right_apply_detl
+        <where>
+            apply_id = #{applyId}
+        </where>
+    </select>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

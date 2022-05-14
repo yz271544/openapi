@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.teradata.openapi.access.biz.dao.ApiInfoMapper">
+  <resultMap id="apiInfoResult" type="com.teradata.openapi.access.biz.bean.ApiInfo">
+    <id column="api_id" jdbcType="INTEGER" property="apiId" />
+    <id column="api_version" jdbcType="INTEGER" property="apiVersion" />
+    <result column="api_cls_code" property="apiClsCode" jdbcType="INTEGER" />
+    <result column="api_stat_code" property="apiStatCode" jdbcType="INTEGER" />
+    <result column="api_sort" jdbcType="INTEGER" property="apiSort" />
+    <result column="data_strct_type_code" jdbcType="INTEGER" property="dataStrctTypeCode" />
+    <result column="relse_type" jdbcType="CHAR" property="relseType" />
+    <result column="api_name" jdbcType="VARCHAR" property="apiName" />
+    <result column="api_desc" jdbcType="VARCHAR" property="apiDesc" />
+    <result column="data_cycle_type" jdbcType="INTEGER" property="dataCycleType" />
+    <result column="relse_persn" jdbcType="VARCHAR" property="relsePersn" />
+    <result column="relse_time" jdbcType="TIMESTAMP" property="relseTime" />
+    <result column="tab_scale_type" jdbcType="INTEGER" property="tabScaleType" />
+    <result column="exam_stat" jdbcType="INTEGER" property="examStat" />
+    <result column="api_class_name" property="apiClassName" jdbcType="VARCHAR" />
+    <result column="trigger_methd" property="triggerMethod" jdbcType="INTEGER" />
+    <result column="api_visit_methd" property="apiVisitMethd" jdbcType="VARCHAR" />
+     <!-- 联合主键  -->
+    <collection column="{apiId=api_id,apiVersion=api_version}" ofType="com.teradata.openapi.access.biz.bean.StructApiArg" property="apiArgList" select="getStructApiArgWithOption" />
+  </resultMap>
+ 
+  
+  <resultMap id="apiArgResult" type="com.teradata.openapi.access.biz.bean.StructApiArg">
+    <id column="api_id" jdbcType="INTEGER" property="apiId" />
+    <id column="api_version" jdbcType="INTEGER" property="apiVersion" />
+    <id column="field_alias" jdbcType="VARCHAR" property="fieldAlias" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="field_eff_stat" jdbcType="INTEGER" property="fieldEffStat" />
+    <result column="field_sorc_type" jdbcType="VARCHAR" property="fieldSorcType" />
+    <result column="field_targt_type" jdbcType="VARCHAR" property="fieldTargtType" />
+    <result column="field_title" jdbcType="VARCHAR" property="fieldTitle" />
+    <result column="sync_must_type" property="syncMustType" jdbcType="INTEGER" />
+    <result column="sync_must_one_grp_id" property="syncMustOneGrpId" jdbcType="INTEGER" />
+    <result column="asyn_must_type" property="asynMustType" jdbcType="INTEGER" />
+    <result column="asyn_must_one_grp_id" property="asynMustOneGrpId" jdbcType="INTEGER" />
+    <result column="rss_must_type" property="rssMustType" jdbcType="INTEGER" />
+    <result column="rss_must_one_grp_id" property="rssMustOneGrpId" jdbcType="INTEGER" />
+    <result column="req_arg_id" jdbcType="CHAR" property="reqArgId" />
+    <result column="req_arg_deflt_val" jdbcType="VARCHAR" property="reqArgDefltVal" />
+    <result column="respn_arg_id" jdbcType="CHAR" property="respnArgId" />
+    <result column="respn_arg_samp_val" jdbcType="VARCHAR" property="respnArgSampVal" />
+    <result column="field_file_desc" jdbcType="VARCHAR" property="fieldFileDesc" />
+    <result column="calc_princ_id" jdbcType="INTEGER" property="calcPrincId" />
+    <result column="value_range" jdbcType="VARCHAR" property="valueRange" />
+  </resultMap>
+  
+  <sql id="api_Column_List">
+    api_id, api_version, api_cls_code,api_stat_code, api_sort, data_strct_type_code, relse_type, api_name, 
+    api_desc, data_cycle_type, relse_persn, relse_time, tab_scale_type,exam_stat,api_class_name,trigger_methd,api_visit_methd
+  </sql>
+  
+  <sql id="struct_Column_List">
+    api_id, api_version, field_alias, field_name, field_eff_stat, field_sorc_type, field_targt_type,
+    field_title, sync_must_type, sync_must_one_grp_id, asyn_must_type,asyn_must_one_grp_id,rss_must_type,rss_must_one_grp_id,
+    req_arg_id, req_arg_deflt_val, respn_arg_id, respn_arg_samp_val, field_file_desc, calc_princ_id, value_range
+  </sql>
+  
+  <select id="queryAllApiInfo" resultMap="apiInfoResult">
+  	 select 
+  	 <include refid="api_Column_List" />
+  	 from opi.api_info where api_stat_code=1
+  	 <!--  select a.*,b.* from opi.api_info a left outer join opi.struct_api_arg b on a.api_id = b.api_id and a.api_version = b.api_version where a.api_stat_code='0'-->
+  </select>
+ 
+ 
+  <select id="getStructApiArgWithOption" parameterType="hashMap" resultMap="apiArgResult">
+  	 select
+  	 <include refid="struct_Column_List"></include>
+     from opi.struct_api_arg where api_id = #{apiId} and api_version = #{apiVersion}
+  </select>
+</mapper>

@@ -1,0 +1,2 @@
+http\://www.rop.com/schema/rop=com.teradata.openapi.rop.config.RopNamespaceHandler
+http\://www.httpserver.com/schema/httpserver=com.teradata.openapi.httpserver.netty.spring.config.CommonRpcHttpNamespaceHandler
